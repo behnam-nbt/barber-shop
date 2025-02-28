@@ -1,15 +1,18 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
+import ThemeProvider from "@/context/ThemeContext";
+import TanstackQueryProvider from "@/components/partials/TanstackQueryProvider";
+import { UserProvider } from "@/context/AuthContext";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+const geistSans = localFont({
+  src: "./fonts/Yekan.woff",
+  weight: "100 900",
+});
+const geistMono = localFont({
+  src: "./fonts/Yekan.woff",
+  weight: "100 900",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata = {
   title: "Create Next App",
@@ -18,12 +21,18 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
-      </body>
+    <html lang="fa" dir="rtl">
+      <UserProvider>
+        <TanstackQueryProvider>
+          <ThemeProvider>
+            <body
+              className={`${geistSans.variable} ${geistMono.variable} antialiased font-custom`}
+            >
+              {children}
+            </body>
+          </ThemeProvider>
+        </TanstackQueryProvider>
+      </UserProvider>
     </html>
   );
 }
