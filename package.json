@@ -9,8 +9,10 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@persian-tools/persian-tools": "^3.6.0",
     "@tanstack/react-query": "^5.66.9",
     "axios": "^1.7.9",
+    "framer-motion": "^12.4.7",
     "js-cookie": "^3.0.5",
     "jsonwebtoken": "^9.0.2",
     "kavenegar": "^1.1.4",
