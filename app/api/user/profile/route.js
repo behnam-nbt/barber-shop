@@ -31,6 +31,7 @@ export async function GET(req) {
 
         return new Response(JSON.stringify({
             phoneNumber: user.phoneNumber,
+            role: user.role,
             createdAt: user.createdAt
         }), { status: 200 });
 

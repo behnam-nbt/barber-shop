@@ -12,7 +12,6 @@ export const UserProvider = ({ children }) => {
     useEffect(() => {
         const fetchUser = async () => {
             const token = Cookies.get("accessToken");
-            console.log("🔹 Token from Cookies:", token); // Debugging
             if (!token) {
                 setLoading(false);
                 return;
@@ -40,9 +39,11 @@ export const UserProvider = ({ children }) => {
         Cookies.remove("accessToken");
         Cookies.remove("refreshToken");
         setUser(null);
-        if (typeof window !== "undefined") {
-            window.location.href = "/";
-        }
+        setTimeout(() => {
+            if (typeof window !== "undefined") {
+                window.location.href = "/";
+            }
+        }, 100);
     };
 
     return (

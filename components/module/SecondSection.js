@@ -15,7 +15,7 @@ function SecondSection() {
                     <li className='pr-10'><Image className='w-[80px]' src="/images/comb.png" width={1900} height={1200} alt='razor' /></li>
                 </ul>
             </div>
-            <Image className='w-[200px] absolute top-28 right-[-140px]' src="/images/shaving.png" width={1900} height={1200} alt='razor' />
+            <Image className='hidden lg:block w-[200px] absolute top-28 right-[-140px]' src="/images/shaving.png" width={1900} height={1200} alt='razor' />
         </div>
     )
 }
