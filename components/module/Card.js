@@ -16,7 +16,7 @@ function Card({ blogs }) {
                 <h1 className='text-4xl font-semibold mb-4'>بلاگ ما</h1>
                 <p className='text-xl md:w-[500px] mx-auto mb-20'>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است.</p>
             </div>
-            <div className='grid grid-cols-1 lg:grid-cols-3 w-[100%] lg:w-[65%] h-auto mx-auto'>
+            <div className='grid grid-cols-1 lg:grid-cols-3 w-[100%] md:w-[65%] h-auto mx-auto'>
                 {blogs.map((blog, index) => {
                     const date = new Date(blog.createdAt);
 
@@ -38,7 +38,7 @@ function Card({ blogs }) {
 
                     return (
                         <div key={index} className='max-md:mb-10 px-2'>
-                            <Image src={blog.image} width={1900} height={1200} alt={blog.title} className='w-[100%] lg:w-[400px] h-[500px]' />
+                            <Image src={blog.image} width={1900} height={1200} alt={blog.title} className='w-[100%] lg:w-[400px] h-[500px] object-cover' />
                             <h1 className='mt-2 lg:mt-10 text-2xl'>{blog.title}</h1>
                             <p>نوشته شده توسط {blog.author} | {digitsEnToFa(day)} {persianMonth} {digitsEnToFa(year)}</p>
                         </div>

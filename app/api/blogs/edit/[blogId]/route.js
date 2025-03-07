@@ -1,14 +1,15 @@
 import Blog from "@/models/Blogs";
 import connectDB from "@/utils/connectDB";
 import { NextResponse } from "next/server";
+import fs from "fs";
+import path from "path";
 
 export async function PUT(req, { params }) {
     await connectDB();
 
     try {
-        const { blogId } = await params;
+        const { blogId } = params;
         const data = await req.formData();
-        const id = blogId;
         const title = data.get("title");
         const slug = data.get("slug");
         const author = data.get("author");
@@ -17,7 +18,7 @@ export async function PUT(req, { params }) {
         const tags = data.get("tags");
         const image = data.get("image");
 
-        if (!id) {
+        if (!blogId) {
             return NextResponse.json(
                 { error: "آیدی پست الزامی است." },
                 { status: 400 }
@@ -25,7 +26,6 @@ export async function PUT(req, { params }) {
         }
 
         const existingBlog = await Blog.findById(blogId);
-
         if (!existingBlog) {
             return NextResponse.json(
                 { error: "پست با این آیدی پیدا نشد." },
@@ -33,30 +33,31 @@ export async function PUT(req, { params }) {
             );
         }
 
-        // Process the image only if a new one is provided
+        // Process new image if provided
         let imagePath = existingBlog.image;
         if (image && image.size > 0) {
-            const imageName = `${image.name}`;
+            const imageName = `${Date.now()}-${image.name}`;
+            const newImagePath = path.join(process.cwd(), "public", "images", imageName);
+
             const buffer = await image.arrayBuffer();
             const bufferData = Buffer.from(buffer);
+            fs.writeFileSync(newImagePath, bufferData);
 
-            const params = {
-                Bucket: process.env.BUCKET_NAME,
-                Key: imageName,
-                Body: bufferData,
-            };
+            // Delete old image (optional)
+            if (existingBlog.image && existingBlog.image.startsWith("/images/")) {
+                const oldImagePath = path.join(process.cwd(), "public", existingBlog.image);
+                if (fs.existsSync(oldImagePath)) {
+                    fs.unlinkSync(oldImagePath);
+                }
+            }
 
-            await s3.upload(params).promise();
-
-            imagePath = `https://${process.env.BUCKET_ENDPOINT}/${process.env.BUCKET_NAME}/${imageName}`;
+            imagePath = `/images/${imageName}`;
         }
 
-        let parsedTags = existingBlog.tags || []; // Default to existing tags
-        if (tags) {
-            parsedTags = tags.split(",").map(tag => tag.trim()); // Assuming tags are comma-separated
-        }
+        // Parse tags
+        const parsedTags = tags ? tags.split(",").map(tag => tag.trim()) : existingBlog.tags;
 
-        // Update blog fields
+        // Update blog post
         existingBlog.title = title || existingBlog.title;
         existingBlog.slug = slug || existingBlog.slug;
         existingBlog.author = author || existingBlog.author;
@@ -65,7 +66,6 @@ export async function PUT(req, { params }) {
         existingBlog.tags = parsedTags;
         existingBlog.image = imagePath;
 
-        // Save the updated blog
         await existingBlog.save();
 
         return NextResponse.json(

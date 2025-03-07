@@ -19,10 +19,13 @@ function Carousel() {
         modules={[Navigation,Autoplay]}
       >
         <SwiperSlide>
-          <Image src="/images/main-image2.png" width={1500} height={1200} alt="slide1" quality={100} />
+          <Image className='object-cover' src="/images/1.png" width={1500} height={1200} alt="slide1" quality={100} />
         </SwiperSlide>
         <SwiperSlide>
-          <Image src="/images/main-image.png" width={1500} height={1200} alt="slide2" quality={100} />
+          <Image className='object-cover' src="/images/2.png" width={1500} height={1200} alt="slide2" quality={100} />
+        </SwiperSlide>
+        <SwiperSlide>
+          <Image className='object-cover' src="/images/3.png" width={1500} height={1200} alt="slide2" quality={100} />
         </SwiperSlide>
       </Swiper>
     </div>

@@ -16,9 +16,9 @@ function Barbers() {
     ];
 
     const barbers = [
-        { id: 1, name: "بهنام نباتی", role: "بنیان گذار", image: "/images/main-image.png" },
-        { id: 2, name: "کامران شجاعی", role: "آرایشگر", image: "/images/main-image2.png" },
-        { id: 3, name: "احسان عیدی", role: "مدیر", image: "/images/main-image.png" },
+        { id: 1, name: "بهنام نباتی", role: "بنیان گذار", image: "/images/behnam.jpg" },
+        { id: 2, name: "کامران شجاعی", role: "آرایشگر", image: "/images/kamran.jpg" },
+        { id: 3, name: "احسان عیدی", role: "مدیر", image: "/images/Esi.jpg" },
     ];
 
     return (
@@ -30,10 +30,10 @@ function Barbers() {
                 </p>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-20 px-2 lg:w-[70%] mx-auto mt-10">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-20 px-2 md:w-[70%] mx-auto mt-10">
                 {barbers.map((barber) => (
                     <div key={barber.id} className="relative border border-zinc-700">
-                        <Image src={barber.image} width={1900} height={1200} className="w-[100%] lg:w-[400px] h-[450px]" />
+                        <Image src={barber.image} width={1900} height={1200} className="w-[100%] lg:w-[400px] h-[450px] object-cover" />
 
                         <div
                             className="flex justify-between items-center absolute bottom-0 h-24 p-4 w-full z-10"

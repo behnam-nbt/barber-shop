@@ -13,7 +13,7 @@ function HappyClients() {
     ];
 
     return (
-        <div className='max-sm:pt-10'>
+        <div className='max-lg:pt-10'>
             <h1 className="text-bold text-4xl text-center">نظرات مشتریان ما</h1>
             <div className={`mx-auto mt-10`}>
                 <Swiper
