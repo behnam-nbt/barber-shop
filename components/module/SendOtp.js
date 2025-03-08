@@ -1,10 +1,9 @@
 import { useState } from 'react';
 import { useSendOtp } from '@/utils/auth';
-import { generateOtp } from '@/helper/otp';
 import { isValidMobile } from '@/utils/phoneValidation';
 import Image from 'next/image';
 
-function SendOtp({ setStep, phoneNumber, setPhoneNumber }) {
+function SendOtp({ setStep, phoneNumber, setPhoneNumber, setOtp }) {
     const [error, setError] = useState("");
 
     // Use the custom hook
@@ -31,6 +30,7 @@ function SendOtp({ setStep, phoneNumber, setPhoneNumber }) {
 
                     if (response?.data?.success) { // Only check for success flag
                         console.log("OTP sent successfully:", response.data);
+                        setOtp(response.data.otp);
                         setStep(2); // Move to next step
                     } else {
                         console.error("Unexpected response:", response.data);

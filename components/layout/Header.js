@@ -7,8 +7,13 @@ import ThemeToggle from '../module/ThemeToggle';
 import { digitsEnToFa } from '@persian-tools/persian-tools';
 import Hamburger from '../module/Hamburger';
 
+import { IoIosArrowDown } from "react-icons/io";
+import { RiAccountCircleLine } from "react-icons/ri";
+import { IoExitOutline } from "react-icons/io5";
+
 function Header() {
     const [isOpen, setIsOpen] = useState(false);
+    const [menuIsOpen, setMenuIsOpen] = useState(false);
     const { user, loading, logout } = useUser();
 
     const menuHandler = () => {
@@ -43,7 +48,20 @@ function Header() {
                         {loading ? (
                             <li className='pr-10 text-xl'><Link href="#">در حال بارگذاری...</Link></li>
                         ) : user ? (
-                            <li className='pr-10 text-xl'><Link href="#">{digitsEnToFa(user.phoneNumber)}</Link></li>
+                            <>
+                                <li className='pr-10 text-xl relative'><span>{digitsEnToFa(user.phoneNumber)}</span><IoIosArrowDown onClick={() => setMenuIsOpen(!menuIsOpen)} className='inline-block cursor-pointer' />
+                                    {menuIsOpen && (
+                                        <div
+                                            className="absolute top-[69px] w-44 text-lg z-10 before:content-[''] before:absolute before:top-[-34px] before:right-0 before:w-full before:h-8"
+                                            style={{ backgroundColor: "var(--background-color)", color: "var(--text-color)" }}>
+                                            <ul className='p-2'>
+                                                <li><Link href="/profile"><RiAccountCircleLine className='inline-block' /> حساب کاربری</Link></li>
+                                                <li><button className='flex items-center mt-4' type='button' onClick={logout}><IoExitOutline className='ml-1' /> خروج از حساب کاربری</button></li>
+                                            </ul>
+                                        </div>
+                                    )}
+                                </li>
+                            </>
                         ) : (
                             <li className='pr-32 text-xl'><Link href="/auth/login">ورود/ثبت نام</Link></li>
                         )}
@@ -75,11 +93,11 @@ function Header() {
                             <li className='text-xl mb-1'><Link href="/">خانه</Link></li>
                             <li className='text-xl mb-1'><Link href="#">رزرو</Link></li>
                             <li className='text-xl mb-1'><Link href="#">پورتفولیو</Link></li>
-                            {user?.role === "admin" ? <li className='text-xl'><Link href="/nxt-admin">داشبورد</Link></li> : null}
+                            {user?.role === "admin" ? <li className='text-xl'><Link href="/nxt-admin">داشبورد</Link><IoIosArrowDown /></li> : null}
                             {loading ? (
                                 <li className='text-xl mb-1'><Link href="#">در حال بارگذاری...</Link></li>
                             ) : user ? (
-                                <li className='text-xl mb-1'><Link href="#">{digitsEnToFa(user.phoneNumber)}</Link></li>
+                                <li className='text-xl mb-1'>{digitsEnToFa(user.phoneNumber)}<IoIosArrowDown /></li>
                             ) : (
                                 <li className='text-xl mb-1'><Link href="/auth/login">ورود/ثبت نام</Link></li>
                             )}

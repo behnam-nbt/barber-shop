@@ -13,7 +13,7 @@ function Login() {
 
     return (
         <Layout>
-            {step === 1 && <SendOtp setStep={setStep} phoneNumber={phoneNumber} setPhoneNumber={setPhoneNumber} />}
+            {step === 1 && <SendOtp setOtp={setOtp} setStep={setStep} phoneNumber={phoneNumber} setPhoneNumber={setPhoneNumber} />}
             {step === 2 && <CheckOtp otp={otp} setOtp={setOtp} phoneNumber={phoneNumber} setStep={setStep} />}
         </Layout>
     )

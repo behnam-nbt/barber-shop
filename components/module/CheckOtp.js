@@ -4,31 +4,38 @@ import { useState } from "react";
 import OtpInput from "react18-input-otp";
 import { setTokens } from '@/utils/tokenHandler';
 import { useCheckOtp } from "@/utils/auth";
+import Image from "next/image";
+import { digitsEnToFa } from "@persian-tools/persian-tools";
 
-function CheckOtp({ setStep, phoneNumber }) {
-    const [otp, setOtp] = useState("");  // ✅ Ensure OTP is properly stored
+function CheckOtp({ setStep, phoneNumber, otp, setOtp }) {
+    const [manualOtp, setManualOtp] = useState("");
     const [error, setError] = useState("");
     const { mutate: checkOtp, isLoading } = useCheckOtp();
 
-    const submitHandler = (e) => {
-        e.preventDefault();
-        console.log("Sending OTP:", otp); // ✅ Check if OTP is correct before sending
+    const handleOtpChange = (otpValue) => {
+        setManualOtp(otpValue);
+        if (otpValue.length === 6) {
+            submitHandler(null, otpValue);
+        }
+    }
 
-        if (otp.length !== 6) {
+    const submitHandler = (e, enteredOtp = manualOtp) => {
+        if (e) e.preventDefault();
+        if (enteredOtp.length !== 6) {
             setError("کد تایید باید ۶ رقمی باشد");
             return;
         }
 
         checkOtp(
-            { phoneNumber, otp },
+            { phoneNumber, otp: enteredOtp },
             {
                 onSuccess: (response) => {
-                    console.log("API Response:", response);  // ✅ Debug API response
+                    console.log("API Response:", response);
                     const { accessToken, refreshToken } = response.data;
 
                     if (accessToken && refreshToken) {
                         setTokens({ accessToken, refreshToken });
-                        window.location.href = '/'; // Redirect on success
+                        window.location.href = '/';
                     } else {
                         setError('خطا در احراز هویت');
                     }
@@ -36,40 +43,47 @@ function CheckOtp({ setStep, phoneNumber }) {
                 onError: (error) => {
                     console.error("API Error:", error.response?.data || error.message);
                     setError("کد تایید معتبر نمی باشد");
-                    setOtp("");
+                    setManualOtp("");
                 },
             }
         );
     };
 
     return (
-        <div>
-            <form onSubmit={submitHandler}>
-                <h2>کد تایید را وارد کنید</h2>
-                <p>کد تایید به شماره {phoneNumber} ارسال شد.</p>
+        <div className="min-h-[calc(100vh-100px)] flex justify-center items-center">
+            <div className="w-[400px] min-h-[200px] border border-zinc-400 rounded-md p-2">
+                <Image className="w-40 h-auto mx-auto" src="/images/logo.png" width={1200} height={900} alt="Logo" />
+                <form onSubmit={submitHandler}>
+                    <h2>کد تایید را وارد کنید</h2>
+                    <p>کد تایید به شماره {digitsEnToFa(phoneNumber)} ارسال شد.</p>
 
-                <div style={{ display: "flex", justifyContent: "center", direction: "ltr", marginTop: "1rem" }}>
-                    <OtpInput
-                        value={otp}
-                        onChange={setOtp}  // ✅ Ensure OTP updates properly
-                        numInputs={6}
-                        inputStyle={{
-                            border: "1px solid silver",
-                            borderRadius: "5px",
-                            width: "49px",
-                            height: "45px",
-                            marginRight: "5px",
-                            justifyContent: "center"
-                        }}
-                    />
-                </div>
+                    <div style={{ display: "flex", justifyContent: "center", direction: "ltr", marginTop: "1rem" }}>
+                        <OtpInput
+                            className="text-zinc-800"
+                            value={manualOtp}
+                            onChange={handleOtpChange}
+                            numInputs={6}
+                            inputStyle={{
+                                border: "1px solid silver",
+                                borderRadius: "5px",
+                                width: "49px",
+                                height: "45px",
+                                marginRight: "5px",
+                                justifyContent: "center"
+                            }}
+                        />
+                    </div>
+                    <p className="text-center">
+                        کد تایید شما: {otp}
+                    </p>
 
-                {!!error && <p style={{ color: "red" }}>{error}</p>}
+                    {!!error && <p style={{ color: "red" }}>{error}</p>}
 
-                <button type="submit" disabled={isLoading}>
-                    {isLoading ? 'در حال ارسال...' : 'ورود'}
-                </button>
-            </form>
+                    <button className="mt-4 px-4 py-2 w-full bg-zinc-500 rounded-md text-white hover:bg-white hover:text-zinc-900 hover:border hover:border-zinc-600" type="submit" disabled={isLoading}>
+                        {isLoading ? 'در حال ارسال...' : 'ورود'}
+                    </button>
+                </form>
+            </div>
         </div>
     );
 }
