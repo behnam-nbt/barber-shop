@@ -42,7 +42,7 @@ function Header() {
                 <div className='flex items-center'>
                     <ul className='flex items-center justify-center w-full'>
                         <li className='pr-10 text-xl'><Link href="/">خانه</Link></li>
-                        <li className='pr-10 text-xl'><Link href="#">رزرو</Link></li>
+                        <li className='pr-10 text-xl'><Link href="/reserve">رزرو</Link></li>
                         <li className='pr-10 text-xl'><Link href="#">پورتفولیو</Link></li>
                         {user?.role === "admin" ? <li className='pr-10 text-xl'><Link href="/nxt-admin">داشبورد</Link></li> : null}
                         {loading ? (
@@ -68,7 +68,7 @@ function Header() {
                     </ul>
                 </div>
                 <div className='flex items-center'>
-                    <Link href="#" className='text-xl border ml-10 border-black px-8 py-1 rounded hover:bg-zinc-700 hover:text-white'>همین الان رزرو کن</Link>
+                    <Link href="/reserve" className='text-xl border ml-10 border-black px-8 py-1 rounded hover:bg-zinc-700 hover:text-white'>همین الان رزرو کن</Link>
                     <ThemeToggle />
                 </div>
             </div>

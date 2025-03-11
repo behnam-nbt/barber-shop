@@ -5,7 +5,7 @@ import { FaFacebook, FaInstagram, FaTelegram, FaTwitter, FaYoutube } from "react
 import { motion } from "framer-motion";
 import { useState } from "react";
 
-function Barbers() {
+function Barbers({ barbers }) {
     const [isHovered, setIsHovered] = useState(null);
     const socialMediaIcons = [
         { id: "instagram", icon: <a href="#"><FaInstagram /></a>, delay: 0.1 },
@@ -13,12 +13,6 @@ function Barbers() {
         { id: "telegram", icon: <a href="#"><FaTelegram /></a>, delay: 0.3 },
         { id: "twitter", icon: <a href="#"><FaTwitter /></a>, delay: 0.4 },
         { id: "youtube", icon: <a href="#"><FaYoutube /></a>, delay: 0.5 },
-    ];
-
-    const barbers = [
-        { id: 1, name: "بهنام نباتی", role: "بنیان گذار", image: "/images/behnam.jpg" },
-        { id: 2, name: "کامران شجاعی", role: "آرایشگر", image: "/images/kamran.jpg" },
-        { id: 3, name: "احسان عیدی", role: "مدیر", image: "/images/Esi.jpg" },
     ];
 
     return (
@@ -33,7 +27,7 @@ function Barbers() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-20 px-2 md:w-[70%] mx-auto mt-10">
                 {barbers.map((barber) => (
                     <div key={barber.id} className="relative border border-zinc-700">
-                        <Image src={barber.image} width={1900} height={1200} className="w-[100%] lg:w-[400px] h-[450px] object-cover" />
+                        <Image src={barber.image} width={1900} height={1200} className="w-[100%] h-[450px] object-cover" />
 
                         <div
                             className="flex justify-between items-center absolute bottom-0 h-24 p-4 w-full z-10"

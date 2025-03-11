@@ -7,7 +7,7 @@ import Barbers from '../module/Barbers';
 import HappyClients from '../module/HappyClients';
 import Card from '../module/Card';
 
-function HomePage({ blogs }) {
+function HomePage({ blogs, barbers }) {
   return (
     <div>
       <Banner />
@@ -21,7 +21,7 @@ function HomePage({ blogs }) {
         <Offers />
       </div>
       <div className="min-h-screen" style={{ backgroundColor: "var(--background-color)" }}>
-        <Barbers />
+        <Barbers barbers={barbers} />
       </div>
       <div className="min-h-[50vh]" style={{ backgroundColor: "var(--background-color)" }}>
         <HappyClients />

@@ -1,14 +1,15 @@
 import Layout from "@/components/layout/Layout";
 import ThemeToggle from "@/components/module/ThemeToggle";
 import HomePage from "@/components/template/HomePage";
-import { fetchBlogs } from "@/services/fetchData";
+import { fetchBarbers, fetchBlogs } from "@/services/fetchData";
 
 async function Home() {
   const blogs = await fetchBlogs();
-  console.log(blogs);
+  const barbers = await fetchBarbers();
+
   return (
     <Layout>
-      <HomePage blogs={blogs} />
+      <HomePage blogs={blogs} barbers={barbers} />
     </Layout>
   );
 }

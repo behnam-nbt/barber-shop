@@ -6,11 +6,16 @@ import { setTokens } from '@/utils/tokenHandler';
 import { useCheckOtp } from "@/utils/auth";
 import Image from "next/image";
 import { digitsEnToFa } from "@persian-tools/persian-tools";
+import { useRouter } from "next/navigation";
+import { useUser } from "@/context/AuthContext";
+import api from "@/api/api";
 
 function CheckOtp({ setStep, phoneNumber, otp, setOtp }) {
     const [manualOtp, setManualOtp] = useState("");
     const [error, setError] = useState("");
     const { mutate: checkOtp, isLoading } = useCheckOtp();
+    const router = useRouter();
+    const { setUser } = useUser();
 
     const handleOtpChange = (otpValue) => {
         setManualOtp(otpValue);
@@ -29,13 +34,22 @@ function CheckOtp({ setStep, phoneNumber, otp, setOtp }) {
         checkOtp(
             { phoneNumber, otp: enteredOtp },
             {
-                onSuccess: (response) => {
+                onSuccess: async (response) => {
                     console.log("API Response:", response);
                     const { accessToken, refreshToken } = response.data;
 
                     if (accessToken && refreshToken) {
                         setTokens({ accessToken, refreshToken });
-                        window.location.href = '/';
+                        try {
+                            // Fetch user profile after storing tokens
+                            const { data: userProfile } = await api.get('/api/user/profile');
+
+                            setUser(userProfile); // Now user is correctly set
+                        } catch (error) {
+                            console.error("Error fetching user profile:", error);
+                            setError("خطا در دریافت اطلاعات کاربری");
+                        }
+                        handleLogin();
                     } else {
                         setError('خطا در احراز هویت');
                     }
@@ -47,6 +61,12 @@ function CheckOtp({ setStep, phoneNumber, otp, setOtp }) {
                 },
             }
         );
+    };
+
+    const handleLogin = () => {
+        const redirectPath = localStorage.getItem("redirectAfterLogin");
+        router.push(redirectPath); // Redirect after successful login
+        localStorage.removeItem("redirectAfterLogin");
     };
 
     return (
