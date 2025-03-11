@@ -18,7 +18,7 @@ function Login() {
     useEffect(() => {
         if (user !== null) {
             const redirectPath = localStorage.getItem("redirectAfterLogin");
-            router.push(redirectPath);
+            router.push("/reserve");
             localStorage.removeItem("redirectAfterLogin");
         }
     }, [user, loading, router]);

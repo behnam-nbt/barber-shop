@@ -55,30 +55,46 @@ function ReservePage({ barbers, categories }) {
                 const res = await fetch(`/api/slot`);
                 const data = await res.json();
                 const filteredSlots = data.slots.filter(
-                    (slot) => slot.barber.toString() === barber && new Date(slot.date).toLocaleDateString() === new Date(date).toLocaleDateString()
+                    (slot) => {
+                        const isAvailable = slot.barber.toString() === barber &&
+                            new Date(slot.date).toLocaleDateString() === new Date(date).toLocaleDateString();
+                        return isAvailable;
+                    }
                 );
-                setAvailableTimeSlots(filteredSlots);
+                // Remove reserved time slots from available slots
+                const availableSlots = filteredSlots.filter(slot =>
+                    !reservedTimeSlots.some(reserved => reserved.timeSlot === slot._id)
+                );
+
+                setAvailableTimeSlots(availableSlots);
             } catch (error) {
                 console.error("Error fetching time slots:", error);
             }
         };
 
         fetchTimeSlots();
-    }, [barber, date]);
+    }, [barber, date, reservedTimeSlots]);
+
 
     useEffect(() => {
         const fetchReservedTimeSlots = async () => {
             try {
                 const res = await fetch(`/api/appointment`);
                 const data = await res.json();
-                setreservedTimeSlots(data);
+
+                if (data.status === 'Success' && Array.isArray(data.slots)) {
+                    setreservedTimeSlots(data.slots); 
+                } else {
+                    toast.error("Unexpected response format:", data);
+                }
             } catch (error) {
-                console.error("Error fetching time slots:", error);
+                toast.error("Error fetching reserved time slots:", error);
             }
         };
 
         fetchReservedTimeSlots();
     }, []);
+
 
 
 

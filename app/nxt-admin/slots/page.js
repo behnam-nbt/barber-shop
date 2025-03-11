@@ -14,10 +14,32 @@ function TimeSlots() {
     const [slotToEdit, setSlotToEdit] = useState(null);
     const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
     const [selectedSlotId, setSelectedSlotId] = useState(null);
+    const [barbers, setBarbers] = useState([]);
 
     const openModal = () => {
         setIsModalOpen(true);
     }
+
+    useEffect(() => {
+        const fetchBarbers = async () => {
+            try {
+                const res = await fetch("/api/barbers");
+                const data = await res.json();
+
+                if (res.ok && data.barbers) {
+                    setBarbers(data.barbers);
+                } else {
+                    toast.error("خطا در بارگذاری لیست آرایشگرها");
+                }
+            } catch (error) {
+                console.error("Error fetching barbers:", error);
+                toast.error("خطا در بارگذاری لیست آرایشگرها");
+            }
+        };
+
+        fetchBarbers();
+    }, []);
+
     const fetchData = async () => {
         try {
             const response = await fetch("/api/slot");
@@ -89,7 +111,7 @@ function TimeSlots() {
             >
                 ایجاد تایم جدید
             </button>
-            {isModalOpen && <AddSlotModal setIsModalOpen={setIsModalOpen} addSlot={addSlot} />}
+            {isModalOpen && <AddSlotModal setIsModalOpen={setIsModalOpen} addSlot={addSlot} barbers={barbers} />}
             <div>
                 <h2 className="text-2xl font-bold mb-4">لیست تایم ها</h2>
                 <div className="overflow-auto rounded-lg shadow-lg">
@@ -107,7 +129,11 @@ function TimeSlots() {
                             {slots.map((slot, index) => (
                                 <tr key={slot._id} className="hover:bg-gray-800">
                                     <td className="px-4 py-2 text-right border border-gray-300">{digitsEnToFa(index + 1)}</td>
-                                    <td className="px-4 py-2 text-right border border-gray-300">{slot.barberId}</td>
+                                    <td className="px-4 py-2 text-right border border-gray-300">{barbers.map((barber) => {
+                                        if (barber._id === slot.barber) {
+                                            return `${barber.name} ${barber.lastName}`;
+                                        }
+                                    })}</td>
                                     <td className="px-4 py-2 text-right border border-gray-300">{slot.timeSlot}</td>
                                     <td className="px-4 py-2 text-right border border-gray-300">{new Date(slot.date).toLocaleDateString("fa-IR")}</td>
                                     <td className="px-4 py-2 text-right border border-gray-300">

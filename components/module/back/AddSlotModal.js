@@ -4,34 +4,12 @@ import { useEffect, useState } from "react";
 import { IoClose } from "react-icons/io5";
 import { toast } from "react-toastify";
 
-function AddSlotModal({ setIsModalOpen, addSlot }) {
-  const [barbers, setBarbers] = useState([]);
+function AddSlotModal({ setIsModalOpen, addSlot, barbers }) {
   const [slot, setSlot] = useState({
     barber: "",
     timeSlot: "",
     date: "",
   });
-
-  useEffect(() => {
-    const fetchBarbers = async () => {
-      try {
-        const res = await fetch("/api/barbers");
-        const data = await res.json();
-
-        if (res.ok && data.barbers) {
-          setBarbers(data.barbers);
-        } else {
-          toast.error("خطا در بارگذاری لیست آرایشگرها");
-        }
-      } catch (error) {
-        console.error("Error fetching barbers:", error);
-        toast.error("خطا در بارگذاری لیست آرایشگرها");
-      }
-    };
-
-    fetchBarbers();
-  }, []);
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setSlot((prev) => ({ ...prev, [name]: value }));
