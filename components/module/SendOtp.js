@@ -64,7 +64,7 @@ function SendOtp({ setStep, phoneNumber, setPhoneNumber, setOtp }) {
                     <div>
                         <label htmlFor="number">شماره تلفن همراه خود را وارد کنید</label>
                         <input
-                            style={{ direction: "ltr" }}
+                            style={{ direction: "ltr", backgroundColor: "var(--background-color)" }}
                             className="mt-2 border border-zinc-400 w-full rounded-md p-1 focus:outline-none"
                             id="number"
                             type="text"

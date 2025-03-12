@@ -89,7 +89,9 @@ function CheckOtp({ setStep, phoneNumber, otp, setOtp }) {
                                 width: "49px",
                                 height: "45px",
                                 marginRight: "5px",
-                                justifyContent: "center"
+                                justifyContent: "center",
+                                backgroundColor: "var(--background-color)",
+                                color: "var(--background-color)"
                             }}
                         />
                     </div>
