@@ -74,7 +74,7 @@ function TimeSlots() {
 
     const handleDelete = async () => {
         try {
-            const res = await fetch(`/api/slot/delete/${selectedSlotId}`, {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/slot/delete/${selectedSlotId}`, {
                 method: "DELETE",
                 headers: { "Content-Type": "application/json" }
             });
