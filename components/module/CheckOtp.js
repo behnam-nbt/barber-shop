@@ -79,7 +79,6 @@ function CheckOtp({ setStep, phoneNumber, otp, setOtp }) {
 
                     <div style={{ display: "flex", justifyContent: "center", direction: "ltr", marginTop: "1rem" }}>
                         <OtpInput
-                            className="text-zinc-800"
                             value={manualOtp}
                             onChange={handleOtpChange}
                             numInputs={6}
@@ -91,7 +90,7 @@ function CheckOtp({ setStep, phoneNumber, otp, setOtp }) {
                                 marginRight: "5px",
                                 justifyContent: "center",
                                 backgroundColor: "var(--background-color)",
-                                color: "var(--background-color)"
+                                color: "var(--text-color)"
                             }}
                         />
                     </div>
