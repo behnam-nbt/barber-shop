@@ -57,31 +57,25 @@ function ReservePage({ barbers, categories }) {
                 const data = await res.json();
                 console.log("Fetched Time Slots:", data);
 
-                const currentTime = new Date(); // Current time in local time zone
-                const selectedDate = new Date(date); // User-selected date
+                const currentTime = new Date(); 
+                const selectedDate = new Date(date);
 
                 const filteredSlots = data.slots.filter((slot) => {
-                    // Ensure barber and date match
                     const isSameBarber = slot.barber.toString() === barber;
                     const slotDate = new Date(slot.date);
 
-                    // Compare using UTC date strings to avoid locale issues
                     const isSameDate = slotDate.toISOString().split('T')[0] === selectedDate.toISOString().split('T')[0];
 
                     if (!isSameBarber || !isSameDate) return false;
 
-                    // Extract and parse time slot
                     const [startTime] = slot.timeSlot.split(" - ");
                     const [startHour, startMinute] = startTime.split(":").map(Number);
 
-                    // Create a date object for the slot time (keeping UTC consistency)
                     const slotDateTime = new Date(slotDate.setUTCHours(startHour, startMinute, 0, 0));
 
-                    // Only keep time slots that are in the future
                     return slotDateTime > currentTime;
                 });
 
-                console.log("Filtered Available Time Slots:", filteredSlots);
 
                 setAvailableTimeSlots(filteredSlots);
             } catch (error) {
