@@ -57,39 +57,33 @@ function ReservePage({ barbers, categories }) {
                 const data = await res.json();
                 console.log("Fetched Time Slots:", data);
 
+                const currentTime = new Date(); // Current time in local time zone
+                const selectedDate = new Date(date); // User-selected date
+
                 const filteredSlots = data.slots.filter((slot) => {
-                    const isAvailable =
-                        slot.barber.toString() === barber &&
-                        new Date(slot.date).toLocaleDateString() === new Date(date).toLocaleDateString();
-
-                    if (!isAvailable) return false;
-
+                    // Ensure barber and date match
+                    const isSameBarber = slot.barber.toString() === barber;
                     const slotDate = new Date(slot.date);
-                    const localSlotDate = new Date(slotDate.toLocaleString()); // Localize date and time
 
-                    const [startTime, endTime] = slot.timeSlot.split(" - ");
+                    // Compare using UTC date strings to avoid locale issues
+                    const isSameDate = slotDate.toISOString().split('T')[0] === selectedDate.toISOString().split('T')[0];
+
+                    if (!isSameBarber || !isSameDate) return false;
+
+                    // Extract and parse time slot
+                    const [startTime] = slot.timeSlot.split(" - ");
                     const [startHour, startMinute] = startTime.split(":").map(Number);
-                    const startSlotTime = new Date(localSlotDate.setHours(startHour, startMinute, 0, 0));
 
-                    const currentTime = new Date();
+                    // Create a date object for the slot time (keeping UTC consistency)
+                    const slotDateTime = new Date(slotDate.setUTCHours(startHour, startMinute, 0, 0));
 
-                    // Compare if the slot start time is in the future
-                    if (startSlotTime > currentTime) {
-                        return true;
-                    }
-
-                    return false;
+                    // Only keep time slots that are in the future
+                    return slotDateTime > currentTime;
                 });
 
-                // Remove reserved time slots from available slots
-                const availableSlots = filteredSlots.filter(
-                    (slot) =>
-                        !reservedTimeSlots.some((reserved) => reserved.timeSlot === slot._id)
-                );
+                console.log("Filtered Available Time Slots:", filteredSlots);
 
-                console.log("Filtered Available Time Slots:", availableSlots);
-
-                setAvailableTimeSlots(availableSlots);
+                setAvailableTimeSlots(filteredSlots);
             } catch (error) {
                 console.error("Error fetching time slots:", error);
             }
@@ -97,6 +91,7 @@ function ReservePage({ barbers, categories }) {
 
         fetchTimeSlots();
     }, [barber, date, reservedTimeSlots]);
+
 
 
     useEffect(() => {
