@@ -17,8 +17,7 @@ function ReservePage({ barbers, categories }) {
     const [timeSlot, setTimeSlot] = useState("");
     const [availableServices, setAvailableServices] = useState([]);
     const [availableTimeSlots, setAvailableTimeSlots] = useState([]);
-    const [reservedTimeSlots, setreservedTimeSlots] = useState([]);
-    const [isDatePickerOpen, setIsDatePickerOpen] = useState(true);
+    const [reservedTimeSlots, setReservedTimeSlots] = useState([]);
 
     const { user, loading } = useUser();
     const router = useRouter();
@@ -32,8 +31,6 @@ function ReservePage({ barbers, categories }) {
             router.push("/auth/login");
         }
     }, [user, loading, router]);
-
-    const timeSlots = ["10:00 - 10:30", "10:30 - 11:00", "11:00 - 11:30", "11:30 - 12:00"];
 
     useEffect(() => {
         const fetchServices = async () => {
@@ -81,7 +78,6 @@ function ReservePage({ barbers, categories }) {
                     return false;
                 });
     
-                // Remove reserved time slots from available slots
                 const availableSlots = filteredSlots.filter(
                     (slot) =>
                         !reservedTimeSlots.some((reserved) => reserved.timeSlot === slot._id)
@@ -95,7 +91,6 @@ function ReservePage({ barbers, categories }) {
     
         fetchTimeSlots();
     }, [barber, date, reservedTimeSlots]);
-    
 
     useEffect(() => {
         const fetchReservedTimeSlots = async () => {
@@ -104,7 +99,7 @@ function ReservePage({ barbers, categories }) {
                 const data = await res.json();
 
                 if (data.status === "Success" && Array.isArray(data.slots)) {
-                    setreservedTimeSlots(data.slots);
+                    setReservedTimeSlots(data.slots);
                 } else {
                     toast.error("Unexpected response format:", data);
                 }
@@ -135,7 +130,7 @@ function ReservePage({ barbers, categories }) {
             date,
             timeSlot,
         };
-        console.log(appointmentData);
+
         try {
             const res = await fetch("/api/appointment", {
                 method: "POST",
@@ -169,7 +164,6 @@ function ReservePage({ barbers, categories }) {
             </div>
 
             <form onSubmit={handleSubmit} className="mt-10 w-full max-w-lg shadow-md p-6 rounded-lg" style={{ backgroundColor: "var(--background-color)" }}>
-                {/* Category Selection */}
                 <label className="block font-semibold mb-2">دسته بندی خدمات:</label>
                 <select
                     style={{ backgroundColor: "var(--background-color)" }}
@@ -185,7 +179,6 @@ function ReservePage({ barbers, categories }) {
                     ))}
                 </select>
 
-                {/* Service Selection */}
                 <label className="block font-semibold mb-2">انتخاب سرویس:</label>
                 <select
                     style={{ backgroundColor: "var(--background-color)" }}
@@ -202,7 +195,6 @@ function ReservePage({ barbers, categories }) {
                     ))}
                 </select>
 
-                {/* Barber Selection */}
                 <label className="block font-semibold mb-2">انتخاب آرایشگر:</label>
                 <select
                     style={{ backgroundColor: "var(--background-color)" }}
@@ -218,7 +210,6 @@ function ReservePage({ barbers, categories }) {
                     ))}
                 </select>
 
-                {/* Date Picker */}
                 <label className="block font-semibold mb-2">تاریخ رزرو:</label>
                 {DatePicker && (
                     <DatePicker
