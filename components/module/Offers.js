@@ -104,7 +104,7 @@ function Offers() {
                 </div>
             </div>
             <div className='text-center mt-10'>
-                <Link className="text-2xl bg-orange-400 text-white px-10 py-2 rounded-md hover:bg-orange-700" href="#">رزرو صندلی</Link>
+                <Link className="text-2xl bg-orange-400 text-white px-10 py-2 rounded-md hover:bg-orange-700" href="/reserve">رزرو صندلی</Link>
             </div>
         </div>
     )
