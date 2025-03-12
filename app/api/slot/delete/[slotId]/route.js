@@ -6,7 +6,7 @@ export async function DELETE(request, { params }) {
     await connectDB();
 
     try {
-        const { slotId } = await params;
+        const { slotId } = params;
 
         if (!slotId) {
             return NextResponse.json(

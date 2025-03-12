@@ -76,6 +76,7 @@ function TimeSlots() {
         try {
             const res = await fetch(`/api/slot/delete/${selectedSlotId}`, {
                 method: "DELETE",
+                headers: { "Content-Type": "application/json" }
             });
 
             if (!res.ok) {
