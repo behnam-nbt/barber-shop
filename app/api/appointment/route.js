@@ -12,7 +12,6 @@ export async function POST(req) {
         const { user, barber, category, serviceId, date, timeSlot } = await req.json();
         console.log("Recived Data:", user, barber, category, serviceId, date, timeSlot);
         
-        // Validate serviceId
         if (!mongoose.Types.ObjectId.isValid(serviceId)) {
             return NextResponse.json({ status: "Failed", message: "شناسه سرویس نامعتبر است!" }, { status: 400 });
         }
@@ -20,25 +19,21 @@ export async function POST(req) {
         const service = await Service.findById(new mongoose.Types.ObjectId(serviceId));
         console.log("Service found:", service);
 
-        // Validate category
         const categoryDoc = await Category.findOne({ name: category });
         if (!categoryDoc) {
             return NextResponse.json({ status: "Failed", message: "دسته بندی نامعتبر است!" }, { status: 400 });
         }
 
-        // Check service-category relationship
         if (!service || !service.category.equals(categoryDoc._id)) {
             return NextResponse.json({ status: "Failed", message: "سرویس مناسب مرتبط با دسته بندی انتخاب نشده است!" }, { status: 400 });
         }
 
-        // Validate barber
         if (!mongoose.Types.ObjectId.isValid(barber)) {
             return NextResponse.json({ status: "Failed", message: "شناسه آرایشگر نامعتبر است!" }, { status: 400 });
         }
 
         const appointmentDate = new Date(Date.parse(date));
         
-        // Check time slot availability
         const timeSlotDoc = await TimeSlot.findOne({
             barber: barber,
             date: appointmentDate, // Use the exact date format
