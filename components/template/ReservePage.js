@@ -4,7 +4,10 @@ import { useUser } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
+import dynamic from "next/dynamic";
+
+const DatePicker = dynamic(() => import("zaman").then((mod) => mod.DatePicker), { ssr: false });
 
 function ReservePage({ barbers, categories }) {
     const [category, setCategory] = useState("");
@@ -15,6 +18,7 @@ function ReservePage({ barbers, categories }) {
     const [availableServices, setAvailableServices] = useState([]);
     const [availableTimeSlots, setAvailableTimeSlots] = useState([]);
     const [reservedTimeSlots, setreservedTimeSlots] = useState([]);
+    const [isDatePickerOpen, setIsDatePickerOpen] = useState(true);
 
     const { user, loading } = useUser();
     const router = useRouter();
@@ -50,31 +54,48 @@ function ReservePage({ barbers, categories }) {
     useEffect(() => {
         const fetchTimeSlots = async () => {
             if (!barber || !date) return;
-
+    
             try {
                 const res = await fetch(`/api/slot`);
                 const data = await res.json();
-                const filteredSlots = data.slots.filter(
-                    (slot) => {
-                        const isAvailable = slot.barber.toString() === barber &&
-                            new Date(slot.date).toLocaleDateString() === new Date(date).toLocaleDateString();
-                        return isAvailable;
+                const filteredSlots = data.slots.filter((slot) => {
+                    const isAvailable =
+                        slot.barber.toString() === barber &&
+                        new Date(slot.date).toLocaleDateString() === new Date(date).toLocaleDateString();
+    
+                    if (!isAvailable) return false;
+    
+                    const slotDate = new Date(slot.date); 
+                    const localSlotDate = new Date(slotDate.toLocaleString());
+    
+                    const [startTime, endTime] = slot.timeSlot.split(" - ");
+                    const [startHour, startMinute] = startTime.split(":").map(Number);
+                    const startSlotTime = new Date(localSlotDate.setHours(startHour, startMinute, 0, 0));
+    
+                    const currentTime = new Date(); 
+    
+                    if (startSlotTime > currentTime) {
+                        return true;
                     }
-                );
+    
+                    return false;
+                });
+    
                 // Remove reserved time slots from available slots
-                const availableSlots = filteredSlots.filter(slot =>
-                    !reservedTimeSlots.some(reserved => reserved.timeSlot === slot._id)
+                const availableSlots = filteredSlots.filter(
+                    (slot) =>
+                        !reservedTimeSlots.some((reserved) => reserved.timeSlot === slot._id)
                 );
-
+    
                 setAvailableTimeSlots(availableSlots);
             } catch (error) {
                 console.error("Error fetching time slots:", error);
             }
         };
-
+    
         fetchTimeSlots();
     }, [barber, date, reservedTimeSlots]);
-
+    
 
     useEffect(() => {
         const fetchReservedTimeSlots = async () => {
@@ -82,8 +103,8 @@ function ReservePage({ barbers, categories }) {
                 const res = await fetch(`/api/appointment`);
                 const data = await res.json();
 
-                if (data.status === 'Success' && Array.isArray(data.slots)) {
-                    setreservedTimeSlots(data.slots); 
+                if (data.status === "Success" && Array.isArray(data.slots)) {
+                    setreservedTimeSlots(data.slots);
                 } else {
                     toast.error("Unexpected response format:", data);
                 }
@@ -94,9 +115,6 @@ function ReservePage({ barbers, categories }) {
 
         fetchReservedTimeSlots();
     }, []);
-
-
-
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -122,7 +140,7 @@ function ReservePage({ barbers, categories }) {
             const res = await fetch("/api/appointment", {
                 method: "POST",
                 body: JSON.stringify(appointmentData),
-                headers: { "Content-Type": "application/json" }
+                headers: { "Content-Type": "application/json" },
             });
 
             const data = await res.json();
@@ -202,15 +220,24 @@ function ReservePage({ barbers, categories }) {
 
                 {/* Date Picker */}
                 <label className="block font-semibold mb-2">تاریخ رزرو:</label>
-                <input
-                    style={{ backgroundColor: "var(--background-color)" }}
-                    type="date"
-                    className="w-full p-2 border rounded mb-4"
-                    value={date}
-                    onChange={(e) => setDate(e.target.value)}
-                />
+                {DatePicker && (
+                    <DatePicker
+                        inputAttributes={{
+                            placeholder: "تاریخ",
+                            style: { borderLeft: "none", backgroundColor: "var(--background-color)" },
+                        }}
+                        accentColor="#EE5A24"
+                        onChange={(value) => {
+                            if (value && value.value) {
+                                const formattedDate = new Date(value.value).toISOString().split('T')[0];
+                                setDate(formattedDate); 
+                            }
+                        }}
+                        value={date ? { value: date } : null} 
+                        inputClass="w-full p-2 border rounded mb-4"
+                    />
+                )}
 
-                {/* Time Slot Selection */}
                 <label className="block font-semibold mb-2">انتخاب ساعت:</label>
                 <select
                     style={{ backgroundColor: "var(--background-color)" }}
@@ -226,7 +253,6 @@ function ReservePage({ barbers, categories }) {
                     ))}
                 </select>
 
-                {/* Submit Button */}
                 <button type="submit" className="w-full bg-orange-600 text-white py-2 rounded mt-4 hover:bg-orange-700">
                     رزرو نوبت
                 </button>

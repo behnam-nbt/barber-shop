@@ -8,7 +8,7 @@ export async function POST(req) {
             const data = await req.formData();
             const barber = data.get("barber");
             const timeSlot = data.get("timeSlot");
-            const date = data.get("date");
+            const date = new Date(data.get("date"));
             const isAvailable =  true;
     
             // Check if all required fields are provided

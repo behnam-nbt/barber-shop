@@ -31,7 +31,7 @@ export async function POST(req) {
             return NextResponse.json({ status: "Failed", message: "شناسه آرایشگر نامعتبر است!" }, { status: 400 });
         }
 
-        const appointmentDate = new Date(date);
+        const appointmentDate = new Date(Date.parse(date));
         const timeSlotDoc = await TimeSlot.findOne({
             barber: barber,
             date: appointmentDate, // Use the exact date format

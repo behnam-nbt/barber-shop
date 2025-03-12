@@ -26,8 +26,8 @@ function Barbers({ barbers }) {
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-20 px-2 md:w-[70%] mx-auto mt-10">
                 {barbers.map((barber) => (
-                    <div key={barber.id} className="relative border border-zinc-700">
-                        <Image src={barber.image} width={1900} height={1200} className="w-[100%] h-[450px] object-cover" />
+                    <div key={barber._id} className="relative border border-zinc-700">
+                        <Image src={barber.image} width={1900} height={1200} className="w-[100%] h-[450px] object-cover" alt={barber.name} />
 
                         <div
                             className="flex justify-between items-center absolute bottom-0 h-24 p-4 w-full z-10"

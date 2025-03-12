@@ -19,15 +19,19 @@
     "js-cookie": "^3.0.5",
     "jsonwebtoken": "^9.0.2",
     "kavenegar": "^1.1.4",
+    "moment-jalaali": "^0.10.4",
     "mongoose": "^8.10.1",
     "next": "15.1.7",
     "react": "^18.3.1",
+    "react-datepicker": "^8.2.0",
     "react-dom": "^18.3.1",
     "react-icons": "^5.5.0",
+    "react-modern-calendar-datepicker": "^3.1.6",
     "react-toastify": "^11.0.5",
     "react18-input-otp": "^1.1.4",
     "redis": "^4.7.0",
-    "swiper": "^11.2.4"
+    "swiper": "^11.2.4",
+    "zaman": "^2.1.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

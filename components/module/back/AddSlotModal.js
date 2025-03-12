@@ -50,7 +50,7 @@ function AddSlotModal({ setIsModalOpen, addSlot, barbers }) {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-      <div className="rounded-md relative w-4/5 max-w-2xl max-h-[90vh] overflow-y-auto p-6" style={{ backgroundColor: "var(--background-color)", color: "var(--text-color)" }}>
+      <div className="rounded-md relative w-4/5 max-w-2xl max-h-[90vh] overflow-y-auto p-6" style={{ backgroundColor: "var(--background-color)" }}>
         <IoClose
           className="absolute top-2 left-2 text-lg cursor-pointer"
           onClick={() => setIsModalOpen(false)}
@@ -59,6 +59,7 @@ function AddSlotModal({ setIsModalOpen, addSlot, barbers }) {
         <div className="space-y-4">
           <label className="block font-semibold mb-2">انتخاب آرایشگر:</label>
           <select
+            style={{ backgroundColor: "var(--background-color)" }}
             name="barber"
             className="w-full p-2 border rounded mb-4"
             value={slot.barber}
@@ -78,6 +79,7 @@ function AddSlotModal({ setIsModalOpen, addSlot, barbers }) {
 
           <label className="block font-semibold mb-2">انتخاب تاریخ:</label>
           <input
+            style={{ backgroundColor: "var(--background-color)" }}
             type="date"
             name="date"
             className="w-full p-2 border rounded mb-4"
@@ -87,6 +89,7 @@ function AddSlotModal({ setIsModalOpen, addSlot, barbers }) {
 
           <label className="block font-semibold mb-2">انتخاب ساعت:</label>
           <input
+            style={{ backgroundColor: "var(--background-color)" }}
             type="text"
             name="timeSlot"
             className="w-full p-2 border rounded mb-4"
