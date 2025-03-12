@@ -51,46 +51,53 @@ function ReservePage({ barbers, categories }) {
     useEffect(() => {
         const fetchTimeSlots = async () => {
             if (!barber || !date) return;
-    
+
             try {
                 const res = await fetch(`/api/slot`);
                 const data = await res.json();
+                console.log("Fetched Time Slots:", data);
+
                 const filteredSlots = data.slots.filter((slot) => {
                     const isAvailable =
                         slot.barber.toString() === barber &&
                         new Date(slot.date).toLocaleDateString() === new Date(date).toLocaleDateString();
-    
+
                     if (!isAvailable) return false;
-    
-                    const slotDate = new Date(slot.date); 
-                    const localSlotDate = new Date(slotDate.toLocaleString());
-    
+
+                    const slotDate = new Date(slot.date);
+                    const localSlotDate = new Date(slotDate.toLocaleString()); // Localize date and time
+
                     const [startTime, endTime] = slot.timeSlot.split(" - ");
                     const [startHour, startMinute] = startTime.split(":").map(Number);
                     const startSlotTime = new Date(localSlotDate.setHours(startHour, startMinute, 0, 0));
-    
-                    const currentTime = new Date(); 
-    
+
+                    const currentTime = new Date();
+
+                    // Compare if the slot start time is in the future
                     if (startSlotTime > currentTime) {
                         return true;
                     }
-    
+
                     return false;
                 });
-    
+
+                // Remove reserved time slots from available slots
                 const availableSlots = filteredSlots.filter(
                     (slot) =>
                         !reservedTimeSlots.some((reserved) => reserved.timeSlot === slot._id)
                 );
-    
+
+                console.log("Filtered Available Time Slots:", availableSlots);
+
                 setAvailableTimeSlots(availableSlots);
             } catch (error) {
                 console.error("Error fetching time slots:", error);
             }
         };
-    
+
         fetchTimeSlots();
     }, [barber, date, reservedTimeSlots]);
+
 
     useEffect(() => {
         const fetchReservedTimeSlots = async () => {
@@ -221,10 +228,10 @@ function ReservePage({ barbers, categories }) {
                         onChange={(value) => {
                             if (value && value.value) {
                                 const formattedDate = new Date(value.value).toISOString().split('T')[0];
-                                setDate(formattedDate); 
+                                setDate(formattedDate);
                             }
                         }}
-                        value={date ? { value: date } : null} 
+                        value={date ? { value: date } : null}
                         inputClass="w-full p-2 border rounded mb-4"
                     />
                 )}
