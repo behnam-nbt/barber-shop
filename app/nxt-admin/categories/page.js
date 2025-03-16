@@ -21,7 +21,7 @@ function Categories() {
     const fetchData = async () => {
         try {
             const response = await api.get("/api/categories");
-            setCategories(response.data);
+            setCategories(response.data.categories);
         } catch (error) {
             toast.error("خطا در دریافت اطلاعات!");
             throw new Error("خطا در دریافت لیست دسته بندی ها!");

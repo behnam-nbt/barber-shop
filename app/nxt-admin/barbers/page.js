@@ -14,6 +14,7 @@ function Barbers() {
   const [barberToEdit, setBarberToEdit] = useState(null);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [selectedBarberId, setSelectedBarberId] = useState(null);
+  console.log(barbers)
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -21,7 +22,7 @@ function Barbers() {
   const fetchData = async () => {
     try {
       const response = await api.get("/api/barbers");
-      setBarbers(response.data);
+      setBarbers(response.data.barbers);
     } catch (error) {
       toast.error("خطا در دریافت اطلاعات!");
       throw new Error("خطا در دریافت لیست آرایشگرها!");

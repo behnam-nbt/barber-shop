@@ -57,7 +57,7 @@ function ReservePage({ barbers, categories }) {
                 const data = await res.json();
                 console.log("Fetched Time Slots:", data);
 
-                const currentTime = new Date(); 
+                const currentTime = new Date();
                 const selectedDate = new Date(date);
 
                 const filteredSlots = data.slots.filter((slot) => {
@@ -216,14 +216,25 @@ function ReservePage({ barbers, categories }) {
                         accentColor="#EE5A24"
                         onChange={(value) => {
                             if (value && value.value) {
-                                const formattedDate = new Date(value.value).toISOString().split('T')[0];
-                                setDate(formattedDate);
+                                const selectedDate = new Date(value.value);
+                                const today = new Date();
+                                today.setHours(0, 0, 0, 0); // Ensure comparison ignores time
+
+                                if (selectedDate < today) {
+                                    toast.error("تاریخ گذشته قابل انتخاب نیست!");
+                                    return; // Reject the past date selection
+                                }
+
+                                const formattedDate = selectedDate.toISOString().split('T')[0];
+                                setDate(formattedDate); // Save the selected valid date
                             }
                         }}
                         value={date ? { value: date } : null}
+                        from={new Date()} // Default to today’s date
                         inputClass="w-full p-2 border rounded mb-4"
                     />
                 )}
+
 
                 <label className="block font-semibold mb-2">انتخاب ساعت:</label>
                 <select
