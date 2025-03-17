@@ -3,7 +3,6 @@ import "./globals.css";
 import ThemeProvider from "@/context/ThemeContext";
 import TanstackQueryProvider from "@/components/partials/TanstackQueryProvider";
 import { UserProvider } from "@/context/AuthContext";
-import { Analytics } from "@vercel/analytics/react"
 
 const geistSans = localFont({
   src: "./fonts/Yekan.woff",
@@ -30,7 +29,6 @@ export default function RootLayout({ children }) {
               className={`${geistSans.variable} ${geistMono.variable} antialiased font-custom`}
             >
               {children}
-              <Analytics/>
             </body>
           </ThemeProvider>
         </TanstackQueryProvider>
