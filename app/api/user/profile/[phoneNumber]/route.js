@@ -6,7 +6,7 @@ export async function GET(req, { params }) {
     try {
         await connectDB();
 
-        const phoneNumber = await params.phoneNumber;
+        const { phoneNumber } = await params;
 
         if (!phoneNumber) {
             return NextResponse.json({ error: "Phone number is required" }, { status: 400 });
