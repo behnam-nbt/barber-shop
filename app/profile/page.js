@@ -1,9 +1,7 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation';
 import { useUser } from '@/context/AuthContext'
-import { digitsEnToFa } from '@persian-tools/persian-tools';
 import Link from 'next/link';
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
@@ -36,7 +34,7 @@ function Profile() {
                     name: res.data.name || "",
                     lastName: res.data.lastName || "",
                     email: res.data.email || "",
-                    phone: res.data.phoneNumber,
+                    phoneNumber: res.data.phoneNumber,
                 });
             }
         } catch (error) {
