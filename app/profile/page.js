@@ -30,7 +30,7 @@ function Profile() {
 
     const fetchProfile = async () => {
         try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/user/profile/${user.phoneNumber}`);
+            const res = await fetch(`/api/user/profile/${user.phoneNumber}`);
             const data = await res.json();
 
             if (res.ok && data.phoneNumber === user.phoneNumber) {
