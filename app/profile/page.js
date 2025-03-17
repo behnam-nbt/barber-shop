@@ -26,7 +26,7 @@ function Profile() {
 
     const fetchProfile = async () => {
         try {
-            const res = await api.get(`${process.env.NEXT_PUBLIC_APP_URL}/api/user/profile/${userId}`);
+            const res = await api.get(`/api/user/profile/${userId}`);
             console.log("API Response:", res);
 
             if (res.status === 200 && res.data.userId === user.id) {

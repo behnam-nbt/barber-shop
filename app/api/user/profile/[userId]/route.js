@@ -6,7 +6,7 @@ export async function GET(req, { params }) {
     try {
         await connectDB();
 
-        const { userId } = await params;
+        const { userId } = params;
         console.log("API hit for userId:", userId);
 
         if (!userId) {
