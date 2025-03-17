@@ -20,14 +20,12 @@ export async function POST(req) {
         const existingProfile = await Profile.findOne({ phoneNumber });
 
         if (existingProfile) {
-            // 🔄 Update the existing profile
             await Profile.findOneAndUpdate(
                 { phoneNumber },
                 { name, lastName, email },
-                { new: true } // Return updated document
+                { new: true } 
             );
         } else {
-            // 🆕 Create a new profile if it doesn't exist
             const newProfile = new Profile({
                 name,
                 lastName,
@@ -51,13 +49,11 @@ export async function GET(req) {
     try {
         await connectDB();
 
-        // 🔹 Get token from headers
         const token = req.headers.get("authorization")?.split(" ")[1];
         if (!token) {
             return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
         }
 
-        // 🔹 Verify JWT
         let decoded;
         try {
             decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
@@ -65,9 +61,6 @@ export async function GET(req) {
             return new Response(JSON.stringify({ error: "Invalid token" }), { status: 401 });
         }
 
-        console.log("✅ Decoded JWT:", decoded); // Debugging step
-
-        // 🔹 Find user by phoneNumber
         const user = await User.findOne({ phoneNumber: decoded.phoneNumber });
 
         if (!user) {
