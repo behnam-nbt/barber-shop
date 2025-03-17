@@ -31,6 +31,7 @@ function Profile() {
     const fetchProfile = async () => {
         try {
             const res = await fetch(`/api/user/profile/${user.phoneNumber}`);
+            console.log("API Response:", res);
             const data = await res.json();
 
             if (res.ok && data.phoneNumber === user.phoneNumber) {
