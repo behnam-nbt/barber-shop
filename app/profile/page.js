@@ -10,12 +10,12 @@ import api from '@/api/api';
 
 function Profile() {
     const { user, loading } = useUser();
-    const phoneNumber = user ? user.phoneNumber : "";
+    const phoneNumber = user ? user.phoneNumber : ""
     const [profile, setProfile] = useState({
         name: "",
         lastName: "",
         email: "",
-        phoneNumber: phoneNumber,
+        phone: phoneNumber,
     })
 
     useEffect(() => {
@@ -29,12 +29,12 @@ function Profile() {
             const res = await api.get(`${process.env.NEXT_PUBLIC_APP_URL}/api/user/profile/${user.phoneNumber}`);
             console.log("API Response:", res);
 
-            if (res.status === 200 && res.data.phoneNumber === user.phoneNumber) {
+            if (res.status === 200 && res.data.phone === user.phoneNumber) {
                 setProfile({
                     name: res.data.name || "",
                     lastName: res.data.lastName || "",
                     email: res.data.email || "",
-                    phoneNumber: res.data.phoneNumber,
+                    phone: res.data.phone,
                 });
             }
         } catch (error) {
@@ -53,7 +53,7 @@ function Profile() {
         formData.append("name", profile.name);
         formData.append("lastName", profile.lastName);
         formData.append("email", profile.email);
-        formData.append("phoneNumber", user.phoneNumber);
+        formData.append("phone", user.phoneNumber);
 
         const res = await fetch("/api/user/profile", {
             method: "POST",
@@ -94,7 +94,7 @@ function Profile() {
                     <input
                         style={{ backgroundColor: "var(--background-color)", color: "var(--text-color)" }}
                         className="px-4 py-2 border border-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
-                        type='text' name='phoneNumber' value={profile.phoneNumber} disabled
+                        type='text' name='phone' value={profile.phone} disabled
                     />
                 </div>
                 <div className='text-center mt-10 grid grid-cols-2 gap-20'>

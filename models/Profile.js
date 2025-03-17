@@ -11,9 +11,8 @@ const profileSchema = new Schema({
         type: String,
         unique: true
     },
-    phoneNumber: {
+    phone: {
         type: String,
-        ref: "User",
         required: true,
     },
 })

@@ -12,16 +12,16 @@ export async function POST(req) {
         const name = data.get("name");
         const lastName = data.get("lastName");
         const email = data.get("email");
-        const phoneNumber = data.get("phoneNumber");
+        const phone = data.get("phone");
 
-        if (!phoneNumber) {
+        if (!phone) {
             return NextResponse.json({ status: "Failed", message: "فیلد شماره را پر کنید!" }, { status: 400 });
         }
-        const existingProfile = await Profile.findOne({ phoneNumber });
+        const existingProfile = await Profile.findOne({ phone });
 
         if (existingProfile) {
             await Profile.findOneAndUpdate(
-                { phoneNumber },
+                { phone },
                 { name, lastName, email },
                 { new: true } 
             );
@@ -30,7 +30,7 @@ export async function POST(req) {
                 name,
                 lastName,
                 email,
-                phoneNumber,
+                phone,
             });
             await newProfile.save();
         }
