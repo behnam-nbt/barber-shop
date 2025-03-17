@@ -1,6 +1,51 @@
 import connectDB from "@/utils/connectDB";
 import User from "@/models/User";
 import jwt from "jsonwebtoken";
+import { NextResponse } from "next/server";
+import Profile from "@/models/Profile";
+
+export async function POST(req) {
+    await connectDB();
+
+    try {
+        const data = await req.formData();
+        const name = data.get("name");
+        const lastName = data.get("lastName");
+        const email = data.get("email");
+        const phoneNumber = data.get("phoneNumber");
+
+        if (!phoneNumber) {
+            return NextResponse.json({ status: "Failed", message: "فیلد شماره را پر کنید!" }, { status: 400 });
+        }
+        const existingProfile = await Profile.findOne({ phoneNumber });
+
+        if (existingProfile) {
+            // 🔄 Update the existing profile
+            await Profile.findOneAndUpdate(
+                { phoneNumber },
+                { name, lastName, email },
+                { new: true } // Return updated document
+            );
+        } else {
+            // 🆕 Create a new profile if it doesn't exist
+            const newProfile = new Profile({
+                name,
+                lastName,
+                email,
+                phoneNumber,
+            });
+            await newProfile.save();
+        }
+        return NextResponse.json({ status: "Success", message: "اطلاعات با موفقیت ذخیره شد!" }, { status: 200 });
+
+    } catch (error) {
+        console.error("خطا در ذخیره اطلاعات!:", error.message);
+        return NextResponse.json(
+            { error: "خطای سرور" },
+            { status: 500 }
+        );
+    }
+}
 
 export async function GET(req) {
     try {
@@ -30,6 +75,7 @@ export async function GET(req) {
         }
 
         return new Response(JSON.stringify({
+            id: user._id,
             phoneNumber: user.phoneNumber,
             role: user.role,
             createdAt: user.createdAt

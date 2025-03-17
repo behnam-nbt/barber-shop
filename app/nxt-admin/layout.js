@@ -11,13 +11,13 @@ function layout({ children }) {
     const router = useRouter();
 
     useEffect(() => {
-        if (user === null) return;
-        if (!loading && user?.role !== "admin") {
-            router.push("/not-found");
+        if (!loading && (!user || user?.role !== "admin")) {
+            router.replace("/not-found");
         }
     }, [user, loading, router]);
 
     if (loading) return <div>Loading...</div>;
+    if (!user || user.role !== "admin") return null;
 
     return (
         <div>

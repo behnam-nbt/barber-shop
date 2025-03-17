@@ -10,4 +10,4 @@ export const useCheckOtp = () => {
     const mutationFn = (data) => api.post("api/check-otp", data);
 
     return useMutation({ mutationFn });
-};  
+};
