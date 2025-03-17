@@ -32,6 +32,7 @@ function Profile() {
         try {
             const apiUrl = process.env.NEXT_PUBLIC_API_URL || "/api/user/profile";
             const res = await fetch(`${apiUrl}/${user.phoneNumber}`);
+            console.log("Request URL:", `${apiUrl}/${user.phoneNumber}`);
             console.log("API Response:", res);
             const data = await res.json();
 
