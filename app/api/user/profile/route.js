@@ -12,25 +12,25 @@ export async function POST(req) {
         const name = data.get("name");
         const lastName = data.get("lastName");
         const email = data.get("email");
-        const phone = data.get("phone");
+        const userId = data.get("userId");
 
-        if (!phone) {
-            return NextResponse.json({ status: "Failed", message: "فیلد شماره را پر کنید!" }, { status: 400 });
+        if (!userId) {
+            return NextResponse.json({ status: "Failed", message: "شناسه کاربر مورد نیاز است" }, { status: 400 });
         }
-        const existingProfile = await Profile.findOne({ phone });
+        const existingProfile = await Profile.findOne({ userId });
 
         if (existingProfile) {
             await Profile.findOneAndUpdate(
-                { phone },
+                { userId },
                 { name, lastName, email },
-                { new: true } 
+                { new: true }
             );
         } else {
             const newProfile = new Profile({
                 name,
                 lastName,
                 email,
-                phone,
+                userId,
             });
             await newProfile.save();
         }

@@ -6,14 +6,14 @@ export async function GET(req, { params }) {
     try {
         await connectDB();
 
-        const { phone } = await params;
-        console.log("API hit for phone:", phone);
+        const { userId } = await params;
+        console.log("API hit for userId:", userId);
 
-        if (!phone) {
-            return NextResponse.json({ error: "Phone number is required" }, { status: 400 });
+        if (!userId) {
+            return NextResponse.json({ error: "userId is required" }, { status: 400 });
         }
 
-        const profile = await Profile.findOne({ phone });
+        const profile = await Profile.findOne({ userId });
 
         if (!profile) {
             return NextResponse.json({ error: "Profile not found" }, { status: 404 });
