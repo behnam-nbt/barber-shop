@@ -7,6 +7,7 @@ import { digitsEnToFa } from '@persian-tools/persian-tools';
 import Link from 'next/link';
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import api from '@/api/api';
 
 
 function Profile() {
@@ -30,25 +31,23 @@ function Profile() {
 
     const fetchProfile = async () => {
         try {
-            const apiUrl = process.env.NEXT_PUBLIC_API_URL || "/api/user/profile";
-            const res = await fetch(`${apiUrl}/${user.phoneNumber}`);
-            console.log("Request URL:", `${apiUrl}/${user.phoneNumber}`);
+            const res = await api.get(`/api/user/profile/${user.phoneNumber}`);
             console.log("API Response:", res);
-            const data = await res.json();
 
-            if (res.ok && data.phoneNumber === user.phoneNumber) {
+            if (res.status === 200 && res.data.phoneNumber === user.phoneNumber) {
                 setProfile({
-                    name: data.name || "",
-                    lastName: data.lastName || "",
-                    email: data.email || "",
+                    name: res.data.name || "",
+                    lastName: res.data.lastName || "",
+                    email: res.data.email || "",
                     userId: user.id,
-                    phone: data.phoneNumber,
+                    phone: res.data.phoneNumber,
                 });
             }
         } catch (error) {
             console.error("Error fetching profile:", error);
         }
     };
+
 
     const handleChange = (e) => {
         const { name, value } = e.target;
