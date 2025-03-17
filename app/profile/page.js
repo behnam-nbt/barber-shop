@@ -12,15 +12,12 @@ import api from '@/api/api';
 
 function Profile() {
     const { user, loading } = useUser();
-    const router = useRouter();
-    const id = user ? user.id : "";
     const phoneNumber = user ? user.phoneNumber : "";
     const [profile, setProfile] = useState({
         name: "",
         lastName: "",
         email: "",
-        userId: id,
-        phone: phoneNumber,
+        phoneNumber: phoneNumber,
     })
 
     useEffect(() => {
@@ -39,7 +36,6 @@ function Profile() {
                     name: res.data.name || "",
                     lastName: res.data.lastName || "",
                     email: res.data.email || "",
-                    userId: user.id,
                     phone: res.data.phoneNumber,
                 });
             }
@@ -100,7 +96,7 @@ function Profile() {
                     <input
                         style={{ backgroundColor: "var(--background-color)", color: "var(--text-color)" }}
                         className="px-4 py-2 border border-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
-                        type='text' name='phoneNumber' value={digitsEnToFa(profile.phone)} disabled
+                        type='text' name='phoneNumber' value={profile.phoneNumber} disabled
                     />
                 </div>
                 <div className='text-center mt-10 grid grid-cols-2 gap-20'>
