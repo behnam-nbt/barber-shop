@@ -1,5 +1,6 @@
 import Profile from "@/models/Profile";
 import connectDB from "@/utils/connectDB";
+import mongoose from "mongoose";
 import { NextResponse } from "next/server";
 
 export async function GET(req, { params }) {
@@ -13,7 +14,7 @@ export async function GET(req, { params }) {
             return NextResponse.json({ error: "userId is required" }, { status: 400 });
         }
 
-        const profile = await Profile.findOne({ userId });
+        const profile = await Profile.findOne({ userId: new mongoose.Types.ObjectId(userId) });
 
         if (!profile) {
             return NextResponse.json({ error: "Profile not found" }, { status: 404 });
