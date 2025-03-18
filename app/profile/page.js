@@ -26,7 +26,7 @@ function Profile() {
 
     const fetchProfile = async () => {
         try {
-            const res = await api.get(`/api/profile/${userId}`);
+            const res = await api.get(`/api/profile/user?userId=${userId}`);
             console.log("API Response:", res);
 
             if (res.status === 200 && res.data.userId === user.id) {

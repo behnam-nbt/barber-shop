@@ -7,8 +7,8 @@ export async function GET(req, { params }) {
     try {
         await connectDB();
 
-        const { userId } = await params;
-        console.log("API hit for userId:", userId);
+        const { searchParams } = new URL(req.url);
+        const userId = searchParams.get("userId");
 
         if (!userId) {
             return NextResponse.json({ error: "userId is required" }, { status: 400 });
