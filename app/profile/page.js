@@ -26,7 +26,7 @@ function Profile() {
 
     const fetchProfile = async () => {
         try {
-            const res = await api.get(`/api/user/profile/${userId}`);
+            const res = await api.get(`/api/profile/${userId}`);
             console.log("API Response:", res);
 
             if (res.status === 200 && res.data.userId === user.id) {
@@ -69,10 +69,10 @@ function Profile() {
     }
 
     return (
-        <div className='min-h-screen'>
+        <div className='min-h-screen px-2 md-px-0'>
             <h2 className='text-4xl mb-10'>حساب کاربری</h2>
-            <div className='w-1/2'>
-                <div className='grid grid-cols-2 gap-20 mb-5'>
+            <div className='w-full lg:w-1/2'>
+                <div className='grid grid-cols-1 md:grid-cols-2 gap-5 lg:gap-20 mb-4 md:mb-5'>
                     <input
                         style={{ backgroundColor: "var(--background-color)", color: "var(--text-color)" }}
                         className="px-4 py-2 border border-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
@@ -84,7 +84,7 @@ function Profile() {
                         type='text' name='lastName' placeholder='نام خانوادگی' value={profile.lastName} onChange={handleChange}
                     />
                 </div>
-                <div className='grid grid-cols-2 gap-20'>
+                <div className='grid grid-cols-1 md:grid-cols-2 gap-5 lg:gap-20'>
                     <input
                         style={{ backgroundColor: "var(--background-color)", color: "var(--text-color)" }}
                         className="px-4 py-2 border border-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
@@ -96,7 +96,7 @@ function Profile() {
                         type='text' name='phone' value={phoneNumber} disabled
                     />
                 </div>
-                <div className='text-center mt-10 grid grid-cols-2 gap-20'>
+                <div className='text-center mt-10 grid grid-cols-1 md:grid-cols-2 gap-5 lg:gap-20'>
                     <button
                         onClick={handleSubmit}
                         className="bg-orange-500 text-white py-2 px-4 rounded-lg font-bold hover:bg-orange-600 transition"

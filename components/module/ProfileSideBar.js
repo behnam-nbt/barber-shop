@@ -7,7 +7,7 @@ function ProfileSideBar() {
             <div className='border border-zinc-500 py-2 rounded-md'>
                 <ul className=''>
                     <Link href="/profile"><li className='border-b border-zinc-500 p-1'>اطلاعات کاربری</li></Link>
-                    <Link href="/profile/#"><li className='p-1'>وقت های رزرو شده</li></Link>
+                    <Link href="/profile/reserved-times"><li className='p-1'>وقت های رزرو شده</li></Link>
                 </ul>
             </div>
         </div>

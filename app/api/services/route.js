@@ -51,13 +51,11 @@ export async function GET(req) {
             return NextResponse.json({ status: "Failed", message: "دسته بندی مشخص نشده است!" }, { status: 400 });
         }
 
-        // Find the category by name
         const category = await Category.findOne({ name: categoryName });
         if (!category) {
             return NextResponse.json({ status: "Failed", message: "دسته بندی پیدا نشد!" }, { status: 404 });
         }
 
-        // Now we have the category ObjectId, use it to fetch services
         const services = await Service.find({ category: category._id });
 
         return NextResponse.json({ status: "Success", services }, { status: 200 });
