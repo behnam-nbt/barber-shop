@@ -11,3 +11,14 @@ export const useCheckOtp = () => {
 
     return useMutation({ mutationFn });
 };
+
+export const useSendProfile = () => {
+    return useMutation({
+        mutationFn: (formData) =>
+            api.post("/api/user/profile", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            }),
+    });
+};

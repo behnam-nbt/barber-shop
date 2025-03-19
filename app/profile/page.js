@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import api from '@/api/api';
+import { useSendProfile } from '@/utils/auth';
 
 
 function Profile() {
@@ -47,6 +48,8 @@ function Profile() {
         setProfile((prevData) => ({ ...prevData, [name]: value }))
     }
 
+    const mutation = useSendProfile();
+
     const handleSubmit = async () => {
         const formData = new FormData();
         formData.append("name", profile.name);
@@ -54,18 +57,37 @@ function Profile() {
         formData.append("email", profile.email);
         formData.append("userId", user.id);
 
-        const res = await fetch("/api/user/profile", {
-            method: "POST",
-            body: formData
-        })
+        // const res = await fetch("/api/user/profile", {
+        //     method: "POST",
+        //     body: formData
+        // })
 
-        const data = await res.json();
-        if (data.status === "Failed") toast.error(data.message);
-        if (data.status === "Success") {
-            toast.success("اطلاعات با موفقیت دخیره شد!");
-            fetchProfile();
-        }
+        // const data = await res.json();
+        // if (data.status === "Failed") toast.error(data.message);
+        // if (data.status === "Success") {
+        //     toast.success("اطلاعات با موفقیت دخیره شد!");
+        //     fetchProfile();
+        // }
 
+        mutation.mutate(formData, {
+            onSuccess: (response) => {
+                if (response?.data?.status === "Success") {
+                    toast.success("اطلاعات با موفقیت ذخیره شد!");
+                    fetchProfile();
+                } else {
+                    toast.error(response?.data?.message || "خطا در ذخیره اطلاعات");
+                }
+            },
+            onError: (error) => {
+                toast.error("Submission error:", error);
+
+                if (error.response) {
+                    toast.error(error.response.data.message || "خطا در ارسال اطلاعات!");
+                } else {
+                    toast.error("خطا در ارسال اطلاعات! لطفا دوباره تلاش کنید.");
+                }
+            },
+        });
     }
 
     return (
@@ -98,11 +120,14 @@ function Profile() {
                 </div>
                 <div className='text-center mt-10 grid grid-cols-1 md:grid-cols-2 gap-5 lg:gap-20'>
                     <button
+                        disabled={mutation.isLoading}
                         onClick={handleSubmit}
-                        className="bg-orange-500 text-white py-2 px-4 rounded-lg font-bold hover:bg-orange-600 transition"
+                        className={`bg-orange-500 text-white py-2 px-4 rounded-lg font-bold hover:bg-orange-600 transition ${mutation.isLoading ? "opacity-50 cursor-not-allowed" : ""
+                            }`}
                     >
-                        ذخیره
+                        {mutation.isLoading ? "در حال ذخیره..." : "ذخیره"}
                     </button>
+
                     <Link href="/"
                         style={{ backgroundColor: "var(--background-color)", color: "var(--text-color)" }}
                         className="py-2 px-4 border border-orange-500 rounded-lg font-semibold"
