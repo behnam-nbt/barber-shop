@@ -10,15 +10,24 @@ import Hamburger from '../module/Hamburger';
 import { IoIosArrowDown } from "react-icons/io";
 import { RiAccountCircleLine } from "react-icons/ri";
 import { IoExitOutline } from "react-icons/io5";
+import { IoCloseOutline } from "react-icons/io5";
+import { FaFacebook, FaInstagram, FaTwitter, FaYoutube } from "react-icons/fa";
+
+import { motion } from "framer-motion";
 
 function Header() {
     const [isOpen, setIsOpen] = useState(false);
+    const [infoMenuIsOpen, setInfoMenuIsOpen] = useState(false);
     const [menuIsOpen, setMenuIsOpen] = useState(false);
     const { user, loading, logout } = useUser();
 
     const menuHandler = () => {
         setIsOpen(true);
         document.body.classList.add("overflow-hidden");
+    }
+
+    const infoMenuHandler = () => {
+        setInfoMenuIsOpen(!infoMenuIsOpen);
     }
 
     const closeMenu = () => {
@@ -37,13 +46,46 @@ function Header() {
             <div className='hidden lg:grid grid-cols-[1fr_3fr_1fr] lg:px-4 py-2 shadow-md'
                 style={{ backgroundColor: "var(--background-color)", color: "var(--text-color)" }}>
                 <div>
-                    <Image src="/images/logo.png" width={1200} height={900} alt='logo' className='w-44 h-auto' />
+                    <Image src="/images/logo.png" width={1200} height={900} alt='logo' className='w-28 h-auto' />
                 </div>
                 <div className='flex items-center'>
                     <ul className='flex items-center justify-center w-full'>
+                        <li>
+                            <div className="cursor-pointer group" onClick={infoMenuHandler}>
+                                <span className="h-[2px] w-[30px] block transition-all duration-300 bg-[var(--text-color)]"></span>
+                                <span className="h-[2px] w-[15px] block mt-2 transition-all duration-300 bg-[var(--text-color)] group-hover:w-[30px]"></span>
+                            </div>
+                        </li>
+                        <motion.div
+                            initial={{ x: "100%" }}
+                            animate={{ x: infoMenuIsOpen ? "0%" : "100%" }}
+                            transition={{ type: "spring", stiffness: 100, damping: 20 }}
+                            className="fixed top-0 right-0 w-96 h-full z-50 shadow-lg"
+                            style={{ backgroundColor: "var(--background-color)", color: "var(--text-color)" }}
+                        >
+                            <IoCloseOutline
+                                className="absolute top-4 left-4 text-4xl cursor-pointer"
+                                onClick={() => setInfoMenuIsOpen(false)}
+                            />
+                            <div className="mt-40 p-8">
+                                <Image src="/images/logo.png" width={1200} height={900} alt='logo' className='w-44 h-auto' />
+                                <ul>
+                                    <li className="text-lg mb-4 text-zinc-500">کرج {digitsEnToFa("98765432(026)")}</li>
+                                    <li className="text-lg mb-4 text-zinc-500">contact.babershop@gmail.com</li>
+                                    <li className="text-lg text-zinc-500">مهرویلا خیابان رودکی</li>
+                                </ul>
+                                <h1 className="mt-10 font-semibold text-3xl">ما را دنبال کنید:</h1>
+                                <ul className="flex justify-evenly items-center mt-10">
+                                    <li><Link href="#"><FaFacebook className="text-3xl hover:text-orange-400" /></Link></li>
+                                    <li><Link href="#"><FaInstagram className="text-3xl hover:text-orange-400" /></Link></li>
+                                    <li><Link href="#"><FaTwitter className="text-3xl hover:text-orange-400" /></Link></li>
+                                    <li><Link href="#"><FaYoutube className="text-3xl hover:text-orange-400" /></Link></li>
+                                </ul>
+                            </div>
+                        </motion.div>
                         <li className='pr-10 text-xl'><Link href="/">خانه</Link></li>
                         <li className='pr-10 text-xl'><Link href="/reserve">رزرو</Link></li>
-                        <li className='pr-10 text-xl'><Link href="#">پورتفولیو</Link></li>
+                        <li className='pr-10 text-xl'><Link href="/portfolio">پورتفولیو</Link></li>
                         {user?.role === "admin" ? <li className='pr-10 text-xl'><Link href="/nxt-admin">داشبورد</Link></li> : null}
                         {loading ? (
                             <li className='pr-10 text-xl'><Link href="#">در حال بارگذاری...</Link></li>

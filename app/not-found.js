@@ -15,7 +15,7 @@ function NotFound() {
             </div>
             <div className="w-full h-[100vh] bg-black bg-opacity-70 text-center z-50">
                 <h1 className='text-9xl pt-20'>404</h1>
-                <p className='text-7xl mb-10'>صفحه مورد نظر یافت نشد</p>
+                <p className='text-4xl md:text-7xl mb-10'>صفحه مورد نظر یافت نشد</p>
                 <Link className='px-20 py-3 bg-zinc-400 text-zinc-900 rounded-md' href="/">بازگشت به صفحه اصلی</Link>
             </div>
         </Layout>

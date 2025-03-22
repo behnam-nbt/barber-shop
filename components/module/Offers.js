@@ -6,7 +6,7 @@ function Offers() {
     return (
         <div className='w-[100%] px-2 lg:px-20 3xl:px-40'>
             <h1 className='text-2xl text-center text-orange-500'>برخی از خدمات ما</h1>
-            <h2 className='text-4xl text-center mt-2'>خدمات آرایشگاه شاکات</h2>
+            <h2 className='text-4xl text-center mt-2'>خدمات آرایشگاه کاخ اصلاح</h2>
             <div className='grid grid-cols-1 lg:grid-cols-2 gap-20 mt-14'>
                 <div>
                     <div className='mb-8'>

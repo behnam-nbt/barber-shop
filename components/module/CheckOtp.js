@@ -16,6 +16,7 @@ function CheckOtp({ setStep, phoneNumber, otp, setOtp }) {
     const { mutate: checkOtp, isLoading } = useCheckOtp();
     const router = useRouter();
     const { setUser } = useUser();
+    const [loading, setLoading] = useState(false);
 
     const handleOtpChange = (otpValue) => {
         setManualOtp(otpValue);
@@ -31,20 +32,20 @@ function CheckOtp({ setStep, phoneNumber, otp, setOtp }) {
             return;
         }
 
+        setLoading(true);
+
         checkOtp(
             { phoneNumber, otp: enteredOtp },
             {
                 onSuccess: async (response) => {
-                    console.log("API Response:", response);
                     const { accessToken, refreshToken } = response.data;
 
                     if (accessToken && refreshToken) {
                         setTokens({ accessToken, refreshToken });
                         try {
-                            // Fetch user profile after storing tokens
                             const { data: userProfile } = await api.get('/api/user/profile');
 
-                            setUser(userProfile); // Now user is correctly set
+                            setUser(userProfile);
                         } catch (error) {
                             console.error("Error fetching user profile:", error);
                             setError("خطا در دریافت اطلاعات کاربری");
@@ -53,11 +54,13 @@ function CheckOtp({ setStep, phoneNumber, otp, setOtp }) {
                     } else {
                         setError('خطا در احراز هویت');
                     }
+                    // setLoading(false);
                 },
                 onError: (error) => {
                     console.error("API Error:", error.response?.data || error.message);
                     setError("کد تایید معتبر نمی باشد");
                     setManualOtp("");
+                    setLoading(false);
                 },
             }
         );
@@ -100,8 +103,8 @@ function CheckOtp({ setStep, phoneNumber, otp, setOtp }) {
 
                     {!!error && <p style={{ color: "red" }}>{error}</p>}
 
-                    <button className="mt-4 px-4 py-2 w-full bg-zinc-500 rounded-md text-white hover:bg-white hover:text-zinc-900 hover:border hover:border-zinc-600" type="submit" disabled={isLoading}>
-                        {isLoading ? 'در حال ارسال...' : 'ورود'}
+                    <button className="mt-4 px-4 py-2 w-full bg-zinc-500 rounded-md text-white hover:bg-white hover:text-zinc-900 hover:border hover:border-zinc-600" type="submit" disabled={loading}>
+                        {loading ? 'در حال ارسال...' : 'ورود'}
                     </button>
                 </form>
             </div>
