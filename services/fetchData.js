@@ -1,6 +1,7 @@
 import Barber from "@/models/Barbers";
 import Blog from "@/models/Blogs";
 import Category from "@/models/Category";
+import Product from "@/models/Product";
 import Service from "@/models/Service";
 import connectDB from "@/utils/connectDB"
 
@@ -22,6 +23,17 @@ export const fetchBarbers = async () => {
         return JSON.parse(JSON.stringify(barbers))
     } catch (error) {
         throw new Error(error.message || "خطای در دریافت لیست آرایشگرها!");
+    }
+}
+
+export const fetchProducts = async () => {
+    await connectDB();
+
+    try {
+        const product = await Product.find();
+        return JSON.parse(JSON.stringify(product))
+    } catch (error) {
+        throw new Error(error.message || "خطای در دریافت لیست محصولات!");
     }
 }
 

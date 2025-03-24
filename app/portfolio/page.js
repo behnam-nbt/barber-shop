@@ -4,30 +4,31 @@ import { useState } from "react";
 
 const headCoaches = ["بهنام", "خانم شهریاری", "آقای احسانی"];
 
+// Fixed group for خانم شهریاری
+const fixedGroup = ["خانم شهریاری", "خانم سارا", "خانم خدادادی"];
+
+// Remaining members excluding those in خانم شهریاری's group
 const members = [
-    "آقای رسولی", "خانم مروت", "خانم رویا", "خانم خدادادی", "خانم سارا", "خانم ناهید", "خانم ندا", "خانم شادی"
+    "آقای رسولی", "خانم مروت", "خانم رویا",
+    "خانم ناهید", "خانم ندا", "خانم شادی"
 ];
 
 function shuffleArray(array) {
     return array.sort(() => Math.random() - 0.5);
 }
 
-function Portfolio() {
+export default function Portfolio() {
     const [groups, setGroups] = useState([]);
 
     const generateGroups = () => {
-        const shuffledMembers = shuffleArray([...members]); // Shuffle non-coach members
-        const shuffledCoaches = shuffleArray([...headCoaches]); // Shuffle head coaches
-        const groupSizes = shuffleArray([4, 4, 3]); // Randomize which group will have 3 members
+        const shuffledMembers = shuffleArray([...members]); // Shuffle remaining members
+        const shuffledCoaches = shuffleArray(["بهنام", "آقای احسانی"]); // Shuffle the 2 remaining coaches
 
-        let startIndex = 0;
-        const newGroups = groupSizes.map((size, i) => {
-            const group = [shuffledCoaches[i], ...shuffledMembers.slice(startIndex, startIndex + size - 1)];
-            startIndex += size - 1;
-            return group;
-        });
+        // Divide remaining members into two groups of 4
+        const group1 = [shuffledCoaches[0], ...shuffledMembers.slice(0, 3)];
+        const group2 = [shuffledCoaches[1], ...shuffledMembers.slice(3, 6)];
 
-        setGroups(newGroups);
+        setGroups([fixedGroup, group1, group2]);
     };
 
     return (
@@ -58,5 +59,3 @@ function Portfolio() {
         </div>
     );
 }
-
-export default Portfolio
