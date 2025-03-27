@@ -21,6 +21,41 @@ function Header() {
     const [menuIsOpen, setMenuIsOpen] = useState(false);
     const { user, loading, logout } = useUser();
 
+    useEffect(() => {
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+        if (cart.length > 0) {
+            syncCartToDatabase(cart);
+        }
+    }, [user])
+
+    const syncCartToDatabase = async (cartItems) => {
+        try {
+            // For each item in local storage, send it to the server
+            for (const item of cartItems) {
+                const res = await fetch('/api/cart', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        userId: user.id, // User ID from context
+                        productId: item.productId,
+                        quantity: item.quantity,
+                    }),
+                    headers: { 'Content-Type': 'application/json' },
+                });
+
+                if (!res.ok) {
+                    throw new Error('Failed to sync cart item');
+                }
+            }
+
+            // After successfully syncing, clear localStorage
+            localStorage.removeItem('cart');
+        } catch (error) {
+            console.error('Error syncing cart to database:', error);
+            toast.error('Failed to sync cart to the server.');
+        }
+    };
+
     const menuHandler = () => {
         setIsOpen(true);
         document.body.classList.add("overflow-hidden");
@@ -32,7 +67,7 @@ function Header() {
 
     const closeMenu = () => {
         setIsOpen(false);
-        document.body.classList.remove("overflow-hidden"); // Allow scrolling when menu is closed
+        document.body.classList.remove("overflow-hidden");
     };
 
     useEffect(() => {
