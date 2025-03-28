@@ -10,12 +10,12 @@ import Hamburger from '../module/Hamburger';
 import { IoIosArrowDown } from "react-icons/io";
 import { RiAccountCircleLine } from "react-icons/ri";
 import { IoExitOutline } from "react-icons/io5";
-import { IoCloseOutline } from "react-icons/io5";
+import { IoCloseOutline, IoCartOutline, } from "react-icons/io5";
 import { FaFacebook, FaInstagram, FaTwitter, FaYoutube } from "react-icons/fa";
 
 import { motion } from "framer-motion";
 
-function Header() {
+function Header({ cartCount, setCartCount }) {
     const [isOpen, setIsOpen] = useState(false);
     const [infoMenuIsOpen, setInfoMenuIsOpen] = useState(false);
     const [menuIsOpen, setMenuIsOpen] = useState(false);
@@ -23,11 +23,25 @@ function Header() {
 
     useEffect(() => {
         const cart = JSON.parse(localStorage.getItem('cart')) || [];
-
-        if (cart.length > 0) {
+        setCartCount(cart.reduce((acc, item) => acc + item.quantity, 0));
+        if (user) {
             syncCartToDatabase(cart);
+            fetchCartFromDatabase(); // Update cart count from DB
         }
-    }, [user])
+    }, [user]); // This will run every time the user logs in or out
+
+
+    const fetchCartFromDatabase = async () => {
+        try {
+            const res = await fetch(`/api/cart?userId=${user.id}`);
+            if (!res.ok) throw new Error('Failed to fetch cart');
+
+            const data = await res.json();
+            setCartCount(data.items.reduce((acc, item) => acc + item.quantity, 0)); // Set cart count from DB
+        } catch (error) {
+            console.error('Error fetching cart:', error);
+        }
+    };
 
     const syncCartToDatabase = async (cartItems) => {
         try {
@@ -50,9 +64,9 @@ function Header() {
 
             // After successfully syncing, clear localStorage
             localStorage.removeItem('cart');
+            fetchCartFromDatabase(); // Sync cart count from DB after sync
         } catch (error) {
             console.error('Error syncing cart to database:', error);
-            toast.error('Failed to sync cart to the server.');
         }
     };
 
@@ -80,8 +94,14 @@ function Header() {
         <>
             <div className='hidden lg:grid grid-cols-[1fr_3fr_1fr] lg:px-4 py-2 shadow-md'
                 style={{ backgroundColor: "var(--background-color)", color: "var(--text-color)" }}>
-                <div>
+                <div className='flex justify-between items-center'>
                     <Image src="/images/logo.png" width={1200} height={900} alt='logo' className='w-28 h-auto' />
+                    <Link href="/cart" className='relative'>
+                        <IoCartOutline className="text-2xl" />
+                        <span className="absolute top-[-10px] right-[-10px] bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                            {cartCount}
+                        </span>
+                    </Link>
                 </div>
                 <div className='flex items-center'>
                     <ul className='flex items-center justify-center w-full'>

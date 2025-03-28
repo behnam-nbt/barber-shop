@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from "framer-motion";
@@ -11,42 +11,77 @@ import { useUser } from '@/context/AuthContext';
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 
-function ShopPage({ products }) {
+function ShopPage({ products, setCartCount }) {
   const [isHovered, setIsHovered] = useState(null);
   const { user, loading } = useUser();
   const [cart, setCart] = useState([]);
 
+  useEffect(() => {
+    if (user) {
+      fetchCart();
+    } else {
+      const localCart = JSON.parse(localStorage.getItem("cart")) || [];
+      setCart(localCart);
+      setCartCount(localCart.reduce((acc, item) => acc + item.quantity, 0));
+    }
+  }, [user]);
+
+  // Fetch cart from backend
+  const fetchCart = async () => {
+    if (!user) return;
+    try {
+      const res = await fetch(`/api/cart?userId=${user.id}`);
+      if (!res.ok) throw new Error("Failed to fetch cart");
+      const data = await res.json();
+  
+      // Set cart and cartCount from the response
+      setCart(data.items || []);
+      setCartCount(data.items.reduce((acc, item) => acc + item.quantity, 0));
+    } catch (error) {
+      console.error("Error fetching cart:", error);
+    }
+  };
+  
+
   const addToCart = async (product) => {
     if (user) {
-      // User is logged in - store in database
-      const requestBody = { userId: user.id, productId: product._id, quantity: 1 };
       try {
+        // Add item to the cart in the database for logged-in users
         const res = await fetch('/api/cart', {
           method: "POST",
-          body: JSON.stringify(requestBody),
-          headers: { "Content-type": "application/json" }
+          body: JSON.stringify({ userId: user.id, productId: product._id, quantity: 1 }),
+          headers: { "Content-type": "application/json" },
         });
-        if (!res.ok) throw new Error("خطا در افزودن محصول به سبد خرید");
-        toast.success("محصول به سبد خرید شما اضافه شد.");
+        if (!res.ok) throw new Error("خطا در اضافه کردن محصول به سبد خرید");
+  
+        toast.success("محصول با موفقیت به سبد خرید شما اضافه شد");
+        
+        // Immediately fetch the updated cart from the database to refresh the cart count
+        fetchCart(); // This will update the `cartCount` from the server
+  
       } catch (error) {
         toast.error(error.message);
       }
     } else {
-      // User is not logged in - store in LocalStorage
-      let cartData = JSON.parse(localStorage.getItem("cart")) || [];
-      const existingItem = cartData.find((item) => item.productId === product._id);
-
+      // Guest cart (localStorage)
+      let localCart = JSON.parse(localStorage.getItem("cart")) || [];
+      const existingItem = localCart.find(item => item.productId === product._id);
+  
       if (existingItem) {
         existingItem.quantity += 1;
       } else {
-        cartData.push({ productId: product._id, title: product.title, price: product.price, image: product.image, quantity: 1 });
+        localCart.push({ productId: product._id, title: product.title, price: product.price, image: product.image, quantity: 1 });
       }
-
-      localStorage.setItem('cart', JSON.stringify(cartData));
-      setCart(cartData); // Update state
-      toast.success("محصول به سبد خرید شما اضافه شد.");
+  
+      // Save to localStorage and update state
+      localStorage.setItem("cart", JSON.stringify(localCart));
+      setCart(localCart);
+      setCartCount(localCart.reduce((acc, item) => acc + item.quantity, 0));
+  
+      toast.success("Product added to cart.");
     }
   };
+  
 
   return (
     <div>
