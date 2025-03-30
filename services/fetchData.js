@@ -1,5 +1,6 @@
 import Barber from "@/models/Barbers";
 import Blog from "@/models/Blogs";
+import Cart from "@/models/Cart";
 import Category from "@/models/Category";
 import Product from "@/models/Product";
 import Service from "@/models/Service";
@@ -45,5 +46,16 @@ export const fetchCategories = async () => {
         return JSON.parse(JSON.stringify(category))
     } catch (error) {
         throw new Error(error.message || "خطای در دریافت لیست دسته بندی ها!");
+    }
+}
+
+export const fetchCart = async () => {
+    await connectDB();
+
+    try {
+        const cart = await Cart.find();
+        return JSON.parse(JSON.stringify(cart))
+    } catch (error) {
+        throw new Error(error.message || "خطای در دریافت لیست سبد خرید!");
     }
 }
