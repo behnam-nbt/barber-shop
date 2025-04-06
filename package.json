@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.0.1",
     "@persian-tools/persian-tools": "^3.6.0",
     "@tanstack/react-query": "^5.66.9",
     "@tiptap/extension-placeholder": "^2.11.5",
@@ -16,6 +17,7 @@
     "@tiptap/starter-kit": "^2.11.5",
     "@vercel/analytics": "^1.5.0",
     "axios": "^1.7.9",
+    "flowbite": "^3.1.2",
     "framer-motion": "^12.4.7",
     "js-cookie": "^3.0.5",
     "jsonwebtoken": "^9.0.2",
@@ -26,6 +28,7 @@
     "react": "^18.3.1",
     "react-datepicker": "^8.2.0",
     "react-dom": "^18.3.1",
+    "react-hook-form": "^7.55.0",
     "react-icons": "^5.5.0",
     "react-modern-calendar-datepicker": "^3.1.6",
     "react-spinners": "^0.15.0",
@@ -33,7 +36,8 @@
     "react18-input-otp": "^1.1.4",
     "redis": "^4.7.0",
     "swiper": "^11.2.4",
-    "zaman": "^2.1.1"
+    "zaman": "^2.1.1",
+    "zod": "^3.24.2"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

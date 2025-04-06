@@ -3,8 +3,8 @@ import Blog from "@/models/Blogs";
 import Cart from "@/models/Cart";
 import Category from "@/models/Category";
 import Product from "@/models/Product";
-import Service from "@/models/Service";
 import connectDB from "@/utils/connectDB"
+import { BASE_URL } from "@/utils/constants";
 
 export const fetchBlogs = async () => {
     await connectDB();
@@ -59,3 +59,18 @@ export const fetchCart = async () => {
         throw new Error(error.message || "خطای در دریافت لیست سبد خرید!");
     }
 }
+
+export const fetchProductBySlug = async (slug) => {
+    try {
+        const response = await fetch(`${BASE_URL}/api/products/${slug}`);
+        if (!response.ok) {
+            const errorDetails = await response.text();
+            throw new Error(`Failed to fetch product. Status: ${response.status}, Details: ${errorDetails}`);
+        }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Error fetching product by slug:", error);
+        return null; // Gracefully handle errors
+    }
+};
