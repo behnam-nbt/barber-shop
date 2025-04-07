@@ -27,7 +27,15 @@ function HomePage({ blogs, barbers }) {
         <HappyClients />
       </div>
       <div className="min-h-screen" style={{ backgroundColor: "var(--background-color)" }}>
-        <Card blogs={blogs} />
+        <div className='text-center'>
+          <h1 className='text-4xl font-semibold mb-4'>بلاگ ما</h1>
+          <p className='text-xl md:w-[500px] mx-auto mb-20'>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است.</p>
+        </div>
+        <div className='grid grid-cols-1 lg:grid-cols-3 w-[100%] md:w-[65%] h-auto mx-auto'>
+          {blogs.map((blog) => (
+            <Card blog={blog} key={blog._id} />
+          ))}
+        </div>
       </div>
     </div>
   );

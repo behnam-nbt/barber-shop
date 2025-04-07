@@ -141,6 +141,7 @@ function Header({ cartCount, setCartCount }) {
                         <li className='pr-10 text-xl'><Link href="/">خانه</Link></li>
                         <li className='pr-10 text-xl'><Link href="/shop">فروشگاه</Link></li>
                         <li className='pr-10 text-xl'><Link href="/reserve">رزرو</Link></li>
+                        <li className='pr-10 text-xl'><Link href="/blogs">بلاگ</Link></li>
                         <li className='pr-10 text-xl'><Link href="/portfolio">پورتفولیو</Link></li>
                         {user?.role === "admin" ? <li className='pr-10 text-xl'><Link href="/nxt-admin">داشبورد</Link></li> : null}
                         {loading ? (
@@ -191,6 +192,7 @@ function Header({ cartCount, setCartCount }) {
                             <li className='text-xl mb-1'><Link href="/">خانه</Link></li>
                             <li className='text-xl mb-1'><Link href="/shop">فروشگاه</Link></li>
                             <li className='text-xl mb-1'><Link href="#">رزرو</Link></li>
+                            <li className='pr-10 text-xl'><Link href="/blogs">بلاگ</Link></li>
                             <li className='text-xl mb-1'><Link href="#">پورتفولیو</Link></li>
                             {user?.role === "admin" ? <li className='text-xl'><Link href="/nxt-admin">داشبورد</Link><IoIosArrowDown /></li> : null}
                             {loading ? (
