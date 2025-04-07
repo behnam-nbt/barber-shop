@@ -84,7 +84,7 @@ function ShopPage({ products, setCartCount }) {
       <div className='container mx-auto p-10'>
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10'>
           {products.map((product) => (
-            <ProductCard key={product._id} product={product} />
+            <ProductCard key={product._id} product={product} addToCart={addToCart} />
           ))}
         </div>
       </div>

@@ -8,7 +8,7 @@ import { BiFullscreen } from "react-icons/bi";
 import { FaRegHeart } from "react-icons/fa6";
 import { useState } from 'react';
 
-function ProductCard({ product }) {
+function ProductCard({ product, addToCart }) {
       const [isHovered, setIsHovered] = useState(null);
     return (
         <div>

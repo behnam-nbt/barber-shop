@@ -2,15 +2,44 @@
 import useCart from '@/hooks/useCart'
 import { digitsEnToFa } from '@persian-tools/persian-tools'
 import Image from 'next/image'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import ProductCard from '../module/ProductCard'
+import { useUser } from '@/context/AuthContext'
 
 function ProductDetailsPage({ product, products, setCartCount }) {
+  const { user, loading } = useUser();
+  const [cart, setCart] = useState([]);
   const { addToCart } = useCart(setCartCount);
   const [activeTab, setActiveTab] = useState("description");
+
+  useEffect(() => {
+    if (user) {
+      fetchCart();
+    } else {
+      const localCart = JSON.parse(localStorage.getItem("cart")) || [];
+      setCart(localCart);
+      setCartCount(localCart.reduce((acc, item) => acc + item.quantity, 0));
+    }
+  }, [user]);
+
+  // Fetch cart from backend
+  const fetchCart = async () => {
+    if (!user) return;
+    try {
+      const res = await fetch(`/api/cart?userId=${user.id}`);
+      if (!res.ok) throw new Error("Failed to fetch cart");
+      const data = await res.json();
+
+      // Set cart and cartCount from the response
+      setCart(data.items || []);
+      setCartCount(data.items.reduce((acc, item) => acc + item.quantity, 0));
+    } catch (error) {
+      console.error("Error fetching cart:", error);
+    }
+  };
 
   const cleanContent = (content) => {
     // Remove empty <p> tags from content
@@ -31,7 +60,7 @@ function ProductDetailsPage({ product, products, setCartCount }) {
             <div className='my-6'>
               <button
                 className='bg-orange-500 px-6 py-2 rounded-md'
-                onClick={addToCart}>افزودن به سبد خرید</button>
+                onClick={() => addToCart(product)}>افزودن به سبد خرید</button>
             </div>
             <span className='font-semibold text-lg pl-1'>موجودی:</span>
             <span className='text-md'>موجود در انبار</span>
