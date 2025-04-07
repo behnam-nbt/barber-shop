@@ -2,7 +2,7 @@ import Layout from "@/components/layout/Layout"
 import { fetchProducts, fetchProductBySlug } from "@/services/fetchData"
 import ProductDetailsPage from "@/components/template/ProductDetailsPage"
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 export async function generateStaticParams() {
     try {
