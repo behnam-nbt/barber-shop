@@ -3,7 +3,7 @@ import BlogDetailsPage from '@/components/template/BlogDetailsPage';
 import { fetchBlogBySlug, fetchBlogs } from '@/services/fetchData';
 import React from 'react'
 
-export const revalidate = 3600;
+export const dynamic = "force-dynamic";
 
 export async function generateStaticParams() {
     try {

@@ -1,6 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     reactStrictMode: true,
-};
-
-export default nextConfig;
+    experimental: {
+      appDir: true,  // فعال کردن پشتیبانی از app directory
+    },
+  };
+  
+  export default nextConfig;
+  
