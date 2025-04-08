@@ -8,13 +8,9 @@ import { BASE_URL } from "@/utils/constants";
 
 export const fetchBlogs = async () => {
     await connectDB();
-    try {
-        const blogs = await Blog.find();
-        return JSON.parse(JSON.stringify(blogs));
-    } catch (error) {
-        throw new Error(error.message || "خطای در دریافت بلاگ!");
-    }
-}
+    const blogs = await Blog.find();
+    return JSON.parse(JSON.stringify(blogs));
+};
 
 export const fetchBarbers = async () => {
     await connectDB();
@@ -80,12 +76,12 @@ export const fetchBlogBySlug = async (slug) => {
         const response = await fetch(`${BASE_URL}/api/blogs/${slug}`);
         if (!response.ok) {
             const errorDetails = await response.text();
-            throw new Error(`Failed to fetch blog. Status: ${response.status}, Details: ${errorDetails}`);
+            throw new Error(`Failed to fetch Blog. Status: ${response.status}, Details: ${errorDetails}`);
         }
         const data = await response.json();
         return data;
     } catch (error) {
-        console.error("Error fetching blog by slug:", error);
+        console.error("Error fetching Blog by slug:", error);
         return null;
     }
 };

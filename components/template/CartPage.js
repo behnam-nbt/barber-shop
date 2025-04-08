@@ -15,8 +15,14 @@ import Link from "next/link";
 function CartPage({ carts, products, setCartCount }) {
     const { user, loading } = useUser();
     const [localCart, setLocalCart] = useState([]);
-    const [userCart, setUserCart] = useState(null); 
+    const [userCart, setUserCart] = useState(null);
     const [totalPrice, setTotalPrice] = useState(0);
+
+    useEffect(() => {
+        console.log("User:", user);
+        console.log("Carts:", carts);
+        console.log("User Cart:", userCart);
+    }, [user, carts, userCart]);
 
     // Load cart from localStorage for guest users
     useEffect(() => {
@@ -30,21 +36,33 @@ function CartPage({ carts, products, setCartCount }) {
 
     // Load user's cart when logged in
     useEffect(() => {
-        if (user) {
+        if (user && carts.length > 0) {
             const foundCart = carts.find(cart => cart.userId === user.id);
-            setUserCart(foundCart || { items: [] }); // Ensures userCart is always an object with items array
+            setUserCart(foundCart || { items: [] });
         }
     }, [user, carts]);
 
     // Update the total price whenever the cart changes
     useEffect(() => {
-        const updatedCart = user ? [...userCart.items] : [...localCart];
+        let updatedCart = [];
+
+        if (user) {
+            if (!userCart) return; 
+            updatedCart = [...userCart.items];
+        } else {
+            updatedCart = [...localCart];
+        }
+
         const total = updatedCart.reduce((acc, item) => {
             const product = products.find(p => p._id === item.productId);
             return acc + (product ? product.price * item.quantity : 0);
         }, 0);
+
         setTotalPrice(total);
-    }, [userCart, localCart, products]);
+    }, [userCart, localCart, products, user]);
+
+
+    if (!carts || carts.length === 0) return <p>در حال بارگذاری سبد خرید...</p>;
 
     if (loading) return <p className="text-center py-4">در حال بارگذاری...</p>;
 
@@ -120,7 +138,7 @@ function CartPage({ carts, products, setCartCount }) {
                     // Update the cart in state and localStorage
                     setUserCart({ ...userCart, items: updatedCart });
                     setCartCount(updatedCart.reduce((acc, item) => acc + item.quantity, 0));
-                    
+
 
                 } catch (error) {
                     toast.error("خطا در بروزرسانی محصول!", error.message);

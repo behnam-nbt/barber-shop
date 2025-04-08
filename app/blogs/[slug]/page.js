@@ -9,18 +9,20 @@ export async function generateStaticParams() {
     try {
         const blogs = await fetchBlogs();
         if (!Array.isArray(blogs)) {
-            throw new Error("خطا در دریافت بلاگ!");
+            throw new Error("Invalid response from fetchBlogs()")
         }
+
         return blogs.map((blog) => ({
-            slug: blog.slug
+            slug: blog.slug,
         }))
     } catch (error) {
-        console.error("خطا در دریافت بلاگ!", error);
+        console.error("Error fetching tours:", error);
+        return [];
     }
 }
 
 async function BlogDetails({ params }) {
-    const { slug } = await params;
+    const { slug } = params;
     const blog = await fetchBlogBySlug(slug);
     const blogs = await fetchBlogs();
     return (
