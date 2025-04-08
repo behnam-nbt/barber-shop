@@ -3,6 +3,8 @@ import CartPage from '@/components/template/CartPage'
 import { fetchCart, fetchProducts } from '@/services/fetchData'
 import React from 'react'
 
+export const dynamic = "force-dynamic";
+
 async function Cart({cartCount, setCartCount}) {
     const carts = await fetchCart();
     const products = await fetchProducts();
