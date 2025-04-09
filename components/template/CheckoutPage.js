@@ -7,7 +7,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useUser } from "@/context/AuthContext"
 import api from "@/api/api";
 import Image from "next/image";
-import Link from "next/link";
 import { digitsEnToFa } from "@persian-tools/persian-tools";
 
 const formSchema = z.object({

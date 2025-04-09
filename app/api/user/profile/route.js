@@ -12,6 +12,8 @@ export async function POST(req) {
         const name = data.get("name");
         const lastName = data.get("lastName");
         const email = data.get("email");
+        const address = data.get("address");
+        const postalCode = data.get("postalCode");
         const userId = data.get("userId");
 
         if (!userId) {
@@ -22,7 +24,7 @@ export async function POST(req) {
         if (existingProfile) {
             await Profile.findOneAndUpdate(
                 { userId },
-                { name, lastName, email },
+                { name, lastName, email, address, postalCode },
                 { new: true }
             );
         } else {
@@ -30,6 +32,8 @@ export async function POST(req) {
                 name,
                 lastName,
                 email,
+                address,
+                postalCode,
                 userId,
             });
             await newProfile.save();

@@ -11,6 +11,14 @@ const profileSchema = new Schema({
         type: String,
         unique: true
     },
+    address: {
+        type: String,
+        unique: true
+    },
+    postalCode: {
+        type: String,
+        unique: true
+    },
     userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
 })
 
