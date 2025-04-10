@@ -337,11 +337,11 @@ function Header({ cartCount, setCartCount, favoriteCount, setFavoriteCount }) {
                 className="lg:hidden fixed bottom-0 right-0 p-4 shadow-md bg-zinc-300 w-full z-50"
             >
                 <div className='flex justify-between items-center'>
-                    <Link className='ml-10 text-lg text-black' href="/auth">ثبت نام / ورود</Link>
+                    <Link className='ml-10 text-lg text-black' href="/auth/login">ثبت نام / ورود</Link>
                     <ul className='flex justify-center items-center ml-8'>
                         <li className='text-xl ml-2 cursor-pointer text-black' onClick={searchHandler}><IoIosSearch /></li>
-                        <li className='text-xl ml-2 text-black'><FaRegHeart /></li>
-                        <li className='text-xl ml-8 text-black'><IoCartOutline /></li>
+                        <li className='text-xl ml-2 text-black'><Link href="/favorites"><FaRegHeart /></Link></li>
+                        <li className='text-xl ml-8 text-black'><Link href="/cart"><IoCartOutline /></Link></li>
                         <li>
                             <div className="cursor-pointer group" onClick={menuHandler}>
                                 <span className="h-[2px] w-[30px] block transition-all duration-300 bg-black"></span>
