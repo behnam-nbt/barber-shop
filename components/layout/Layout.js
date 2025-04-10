@@ -5,10 +5,11 @@ import Footer from './Footer'
 
 function Layout({ children }) {
     const [cartCount, setCartCount] = useState(0);
-    const childProps = { cartCount, setCartCount };
+    const [favoriteCount, setFavoriteCount] = useState(0);
+    const childProps = { cartCount, setCartCount, favoriteCount ,setFavoriteCount  };
     return (
         <>
-            <Header cartCount={cartCount} setCartCount={setCartCount} />
+            <Header cartCount={cartCount} setCartCount={setCartCount} favoriteCount={favoriteCount} setFavoriteCount={setFavoriteCount} />
             <div className='min-h-screen'>
                 {React.Children.map(children, (child) =>
                     React.isValidElement(child)

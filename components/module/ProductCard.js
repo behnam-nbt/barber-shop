@@ -8,8 +8,8 @@ import { BiFullscreen } from "react-icons/bi";
 import { FaRegHeart } from "react-icons/fa6";
 import { useState } from 'react';
 
-function ProductCard({ product, addToCart }) {
-      const [isHovered, setIsHovered] = useState(null);
+function ProductCard({ product, addToCart, addToLike }) {
+    const [isHovered, setIsHovered] = useState(null);
     return (
         <div>
             <div
@@ -36,7 +36,7 @@ function ProductCard({ product, addToCart }) {
                     {[
                         { id: "cart", icon: <IoCartOutline />, action: () => addToCart(product), delay: 0.1 },
                         { id: "more", icon: <BiFullscreen />, action: () => console.log("Show product details"), delay: 0.2 },
-                        { id: "like", icon: <FaRegHeart />, action: () => console.log("Add to favorites"), delay: 0.3 },
+                        { id: "like", icon: <FaRegHeart />, action: () => addToLike(product), delay: 0.3 },
                     ].map((item) => (
                         <motion.div
                             key={item.id}
@@ -45,14 +45,20 @@ function ProductCard({ product, addToCart }) {
                             transition={{ delay: isHovered === product._id ? item.delay : 0, duration: 0.3 }}
                             className="w-10 h-10 flex justify-center items-center bg-black text-white rounded-full"
                         >
-                            <button onClick={item.action} aria-label={item.id}>
-                                {item.icon}
-                            </button>
+                            {item.id === "more" ? (
+                                <Link href={`/shop/${product.slug}`} aria-label={item.id}>
+                                    {item.icon}
+                                </Link>
+                            ) : (
+                                <button onClick={item.action} aria-label={item.id}>
+                                    {item.icon}
+                                </button>
+                            )}
                         </motion.div>
                     ))}
                 </div>
             </div>
-        </div>
+        </div >
     )
 }
 

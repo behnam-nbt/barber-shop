@@ -2,6 +2,7 @@ import Barber from "@/models/Barbers";
 import Blog from "@/models/Blogs";
 import Cart from "@/models/Cart";
 import Category from "@/models/Category";
+import Like from "@/models/Like";
 import Product from "@/models/Product";
 import connectDB from "@/utils/connectDB"
 import { BASE_URL } from "@/utils/constants";
@@ -53,6 +54,17 @@ export const fetchCart = async () => {
         return JSON.parse(JSON.stringify(cart))
     } catch (error) {
         throw new Error(error.message || "خطای در دریافت لیست سبد خرید!");
+    }
+}
+
+export const fetchFavorites = async () => {
+    await connectDB();
+
+    try {
+        const like = await Like.find();
+        return JSON.parse(JSON.stringify(like))
+    } catch (error) {
+        throw new Error(error.message || "خطای در دریافت لیست علاقه مندی ها!");
     }
 }
 

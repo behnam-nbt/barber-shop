@@ -5,11 +5,11 @@ import React from 'react'
 
 export const revalidate = 3600;
 
-async function Shop() {
+async function Shop({ setCartCount, setFavoriteCount }) {
     const products = await fetchProducts();
     return (
         <Layout>
-            <ShopPage products={products} />
+            <ShopPage products={products} setCartCount={setCartCount} setFavoriteCount={setFavoriteCount} />
         </Layout>
     )
 }
