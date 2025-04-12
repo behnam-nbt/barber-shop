@@ -47,7 +47,7 @@ function CartPage({ carts, products, setCartCount }) {
         let updatedCart = [];
 
         if (user) {
-            if (!userCart) return; 
+            if (!userCart) return;
             updatedCart = [...userCart.items];
         } else {
             updatedCart = [...localCart];
@@ -194,62 +194,32 @@ function CartPage({ carts, products, setCartCount }) {
                     </div>
                 </div>
                 {displayCart.length > 0 ? (
-                    <div className="overflow-x-auto">
-                        <table className="w-full border-collapse text-right">
-                            <thead>
-                                <tr>
-                                    <th className="px-20 py-3 text-xl">تصویر</th>
-                                    <th className="px-4 py-3 text-xl">نام محصول</th>
-                                    <th className="px-4 py-3 text-xl">قیمت</th>
-                                    <th className="px-4 py-3 text-xl">تعداد</th>
-                                    <th className="px-4 py-3 text-xl"></th>
-                                    <th className="px-4 py-3 text-xl">حذف</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {displayCart.map((item) => {
-                                    const product = products.find(p => p._id === item.productId);
-                                    return product ? (
-                                        <tr key={item.productId}>
-                                            <td className="px-4 py-3">
-                                                <Image
-                                                    src={product.image}
-                                                    width={1900}
-                                                    height={1200}
-                                                    alt={product.title}
-                                                    className="w-[200px] h-auto object-cover"
-                                                />
-                                            </td>
-                                            <td className="px-4 py-3 text-xl">{product.title}</td>
-                                            <td className="px-4 py-3 text-xl">{digitsEnToFa(product.price.toLocaleString())} تومان</td>
-                                            <td className="px-4 py-3 text-xl">{digitsEnToFa(item.quantity)}</td>
-                                            <td>
-                                                <button
-                                                    onClick={() => handleQuantityChange(item.productId, "decrease", !user)}
-                                                    className="px-3 py-1 text-xl rounded-full"
-                                                >
-                                                    -
-                                                </button>
-                                                <button
-                                                    onClick={() => handleQuantityChange(item.productId, "increase", !user)}
-                                                    className="px-3 py-1 text-xl rounded-full"
-                                                >
-                                                    +
-                                                </button>
-                                            </td>
-                                            <td>
-                                                <button
-                                                    onClick={() => handleDelete(user ? item._id : item.productId, !user)}
-                                                    className="text-red-500 hover:text-red-700"
-                                                >
-                                                    <PiTrashSimpleLight size={24} />
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    ) : null;
-                                })}
-                            </tbody>
-                        </table>
+                    <div className="overflow-x-auto max-sm:mt-10">
+                        {displayCart.map((item) => {
+                            const product = products.find(p => p._id === item.productId);
+                            return product ? (
+                                <div className="flex items-center md:justify-between" key={item.productId}>
+                                    <Image src={product.image} width={1920} height={1080} alt={product.title} className="w-[100px] md:w-[200px] h-auto" />
+                                    <div>
+                                        <h1 className="text-md md:text-xl">{product.title}</h1>
+                                        <div className="flex items-center">
+                                            <button onClick={() => handleQuantityChange(item.productId, "increase", !user)}
+                                                className="py-4 text-xl w-8 h-8 flex items-center justify-center border border-zinc-500 rounded-full">+</button>
+                                            <span className="px-4 py-3 text-xl">{digitsEnToFa(item.quantity)}</span>
+                                            <button onClick={() => handleQuantityChange(item.productId, "decrease", !user)}
+                                                className="px-3 py-1 text-xl w-8 h-8 flex items-center justify-center border border-zinc-500 rounded-full">-</button>
+                                            <span className="px-4 py-3 text-md md:text-xl">{digitsEnToFa(product.price.toLocaleString())} تومان</span>
+                                        </div>
+                                    </div>
+                                    <button
+                                        onClick={() => handleDelete(user ? item._id : item.productId, !user)}
+                                        className="py-4 text-red-500 hover:text-red-700"
+                                    >
+                                        <PiTrashSimpleLight size={24} />
+                                    </button>
+                                </div>
+                            ) : null;
+                        })}
                     </div>
                 ) : (
                     <p className="text-center py-4">سبد خرید شما خالی است.</p>

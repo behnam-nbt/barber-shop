@@ -340,8 +340,26 @@ function Header({ cartCount, setCartCount, favoriteCount, setFavoriteCount }) {
                     <Link className='ml-10 text-lg text-black' href="/auth/login">ثبت نام / ورود</Link>
                     <ul className='flex justify-center items-center ml-8'>
                         <li className='text-xl ml-2 cursor-pointer text-black' onClick={searchHandler}><IoIosSearch /></li>
-                        <li className='text-xl ml-2 text-black'><Link href="/favorites"><FaRegHeart /></Link></li>
-                        <li className='text-xl ml-8 text-black'><Link href="/cart"><IoCartOutline /></Link></li>
+                        <li className='text-xl ml-2 text-black relative'>
+                            <Link href="/favorites">
+                                <FaRegHeart />
+                            </Link>
+                            {favoriteCount > 0 && (
+                                <span className="absolute top-[-10px] left-[15px] bg-red-600 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+                                    {favoriteCount}
+                                </span>
+                            )}
+                        </li>
+                        <li className='text-xl ml-8 text-black relative'>
+                            <Link href="/cart">
+                                <IoCartOutline />
+                            </Link>
+                            {cartCount > 0 && (
+                                <span className="w-4 h-4 absolute top-[-10px] right-[-10px] bg-red-600 text-white text-xs rounded-full flex items-center justify-center">
+                                    {cartCount}
+                                </span>
+                            )}
+                        </li>
                         <li>
                             <div className="cursor-pointer group" onClick={menuHandler}>
                                 <span className="h-[2px] w-[30px] block transition-all duration-300 bg-black"></span>
