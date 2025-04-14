@@ -21,6 +21,21 @@ export async function generateStaticParams() {
     }
 }
 
+export async function generateMetadata({ params }) {
+    const { slug } = params;
+    const blog = await fetchBlogBySlug(slug);
+
+    if (!blog) {
+        return {
+            title: "Blog not found",
+        };
+    }
+
+    return {
+        title: blog.title
+    };
+}
+
 async function BlogDetails({ params }) {
     const { slug } = params;
     const blog = await fetchBlogBySlug(slug);

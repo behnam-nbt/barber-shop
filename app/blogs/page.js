@@ -5,6 +5,10 @@ import React from 'react'
 
 export const revalidate = 3600;
 
+export const metadata = {
+    title: "بلاگ"
+};
+
 async function Blogs() {
     const blogs = await fetchBlogs();
     return (

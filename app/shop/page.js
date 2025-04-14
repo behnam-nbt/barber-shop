@@ -5,6 +5,9 @@ import React from 'react'
 
 export const revalidate = 3600;
 
+export const metadata = {
+    title: "فروشگاه"
+}
 async function Shop({ setCartCount, setFavoriteCount }) {
     const products = await fetchProducts();
     return (
