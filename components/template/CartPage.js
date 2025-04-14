@@ -189,7 +189,11 @@ function CartPage({ carts, products, setCartCount }) {
                             <p>{digitsEnToFa(totalPrice)} تومان</p>
                         </div>
                         <div className="w-full text-center mt-10">
-                            <Link href="/checkout" className="bg-orange-500 px-20 py-2 rounded-md text-white">ادامه خرید</Link>
+                            {displayCart.length > 0 ? (
+                                <Link href="/checkout" className="bg-orange-500 px-20 py-2 rounded-md text-white">ادامه خرید</Link>
+                            ) : (
+                                <Link href="/shop" className="bg-orange-500 px-20 py-2 rounded-md text-white">ادامه خرید</Link>
+                            )}
                         </div>
                     </div>
                 </div>

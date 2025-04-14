@@ -5,6 +5,10 @@ import React from 'react'
 
 export const dynamic = "force-dynamic";
 
+export const metadata = {
+    title: "لیست علافه مندی ها"
+}
+
 async function Favorites({favoriteCount, setFavoriteCount}) {
     const likes = await fetchFavorites();
     const products = await fetchProducts();
