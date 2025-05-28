@@ -81,6 +81,15 @@ npm run dev
 # or
 yarn dev
 ```
+
+
+## 🛡️ Security Notes
+- Tokens are securely stored in HttpOnly cookies
+- OTP-based login system ensures no passwords are required
+- Input validation with Zod
+
+
+
 ## 🙏 Acknowledgments
 - **Next.js** (App Router)
 - **Tailwind CSS**
